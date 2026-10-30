@@ -12,7 +12,7 @@ npm start
 
 Open **http://127.0.0.1:4173**. Always serve over HTTP/HTTPS; do not open `index.html` as a file, because the worker needs a proper origin. Set `PORT` if 4173 is occupied.
 
-For development checks, install the single pinned image-fixture dependency:
+For development checks, install the pinned development dependencies (Node20.9 or newer is required for the optional real-photo decoder):
 
 ```sh
 npm ci
