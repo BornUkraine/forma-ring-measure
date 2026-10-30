@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f6f5ef">
+  <meta name="description" content="Estimate a ring's inside diameter from a photo and a printed 20 mm calibration marker. Private, on-device photo measurement.">
+  <title>Forma — A clearer picture of your ring size</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23213e35'/%3E%3Ccircle cx='20' cy='20' r='11' fill='none' stroke='%23f6f5ef' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="sizing.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#measure">Skip to measurement</a>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="Forma home">
+        <span class="brand-symbol" aria-hidden="true"><svg viewBox="0 0 36 36"><circle cx="15" cy="18" r="10"/><path d="M21 9.8a10 10 0 0 1 0 16.4"/></svg></span>
+        <span class="brand-name">forma<span class="brand-dot">.</span></span>
+        <span class="brand-descriptor">Ring measurement</span>
+      </a>
+      <nav aria-label="Main navigation">
+        <button class="text-button guide-trigger" type="button">How it works <span aria-hidden="true">↗</span></button>
+        <a class="header-download" href="marker.svg" download="forma-20mm-marker.svg"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v9m-3-3 3 3 3-3M4 13v4h12v-4"/></svg>Get the marker</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span></span> A small reference. A useful estimate.</p>
+          <h1 id="page-title">A clearer picture<br>of your <em>ring size.</em></h1>
+          <p class="hero-description">One ring, one printed marker, one photograph.<br class="desktop-break"> Find your ring’s inside diameter, without the guesswork.</p>
+          <div class="privacy-note"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2 4 4v5c0 4 6 8 6 8s6-4 6-8V4z"/><path d="m7 9 2 2 4-4"/></svg>Your photo stays on your device.</div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <svg class="scene" viewBox="0 0 470 285" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="ring-metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b9bdb2"/><stop offset=".22" stop-color="#eff0e7"/><stop offset=".48" stop-color="#858d7f"/><stop offset=".7" stop-color="#d8dacf"/><stop offset="1" stop-color="#7b8879"/></linearGradient>
+              <radialGradient id="ring-shadow"><stop stop-color="#415343" stop-opacity=".16"/><stop offset="1" stop-color="#415343" stop-opacity="0"/></radialGradient>
+              <filter id="paper-shadow"><feDropShadow dx="0" dy="9" stdDeviation="10" flood-color="#29392d" flood-opacity=".08"/></filter>
+            </defs>
+            <path d="M28 22h17M28 22v17m414-17h-17m17 0v17M28 263h17m-17 0v-17m414 17h-17m17 0v-17" fill="none" stroke="#c6cbc0"/>
+            <g transform="translate(23 10) rotate(-6 212 135)" filter="url(#paper-shadow)">
+              <rect x="31" y="29" width="361" height="207" rx="3" fill="#fffefa" stroke="#e9e7dd"/>
+              <ellipse cx="152" cy="144" rx="82" ry="70" fill="url(#ring-shadow)"/>
+              <circle cx="151" cy="130" r="57" fill="url(#ring-metal)" stroke="#a4ad9e"/>
+              <circle cx="151" cy="130" r="44" fill="#fffefa" stroke="#6d7d69" stroke-width="2"/>
+              <circle cx="151" cy="130" r="43" fill="none" stroke="#b39154" stroke-width="1.2" stroke-dasharray="3 3"/>
+              <path d="M108 130h86M108 126v8m86-8v8" stroke="#b39154" stroke-width="1.2"/>
+              <g transform="translate(267 94)">
+                <rect width="63" height="63" fill="#213e35"/>
+                <g fill="#fffefa"><path d="M10.5 10.5h10.5V21H10.5zM21 10.5h10.5V21H21zM42 10.5h10.5V21H42zM21 21h10.5v10.5H21zM31.5 21H42v10.5H31.5zM10.5 31.5H21V42H10.5zM31.5 31.5H42V42H31.5zM21 42h10.5v10.5H21zM42 42h10.5v10.5H42z"/></g>
+                <path d="M-5-5h12m-12 0V7m73-12H56m12 0V7M-5 68H7m-12 0V56m73 12H56m12 0V56" stroke="#678474" fill="none"/>
+                <path d="M0 79h63m-63-4v8m63-8v8" stroke="#7b8c7a" fill="none"/>
+                <text x="31.5" y="96" text-anchor="middle" fill="#6e7c6a" font-family="system-ui,sans-serif" font-size="10">20 mm</text>
+              </g>
+              <text x="59" y="211" fill="#91968a" font-family="system-ui,sans-serif" font-size="8" letter-spacing="1.3">ILLUSTRATIVE SETUP</text>
+            </g>
+            <circle cx="395" cy="52" r="23" fill="#e9ede3" stroke="#d9e0d1"/><path d="m386 52 6 6 11-12" stroke="#365a42" stroke-width="1.6" fill="none"/>
+          </svg>
+          <div class="visual-caption"><span class="caption-line"></span>Real-world scale, from a simple square.</div>
+        </div>
+      </section>
+
+      <section class="measure-area" id="measure" aria-label="Measure your ring">
+        <ol class="workflow" aria-label="Measurement steps">
+          <li class="step"><span class="step-number">01</span><span>Print your marker</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h12m-4-4 4 4-4 4"/></svg></li>
+          <li class="step active" id="upload-step"><span class="step-number">02</span><span>Upload a photo</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h12m-4-4 4 4-4 4"/></svg></li>
+          <li class="step" id="result-step"><span class="step-number">03</span><span>See your estimate</span></li>
+        </ol>
+
+        <div class="workspace" id="upload-section">
+          <section class="upload-card" aria-labelledby="upload-title">
+            <div class="card-heading"><div><p class="eyebrow small">LET’S FIND YOUR FIT</p><h2 id="upload-title">Start with your photograph.</h2></div><span class="private-pill"><span></span>On-device</span></div>
+            <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" hidden>
+            <div class="dropzone" id="dropzone">
+              <div class="upload-symbol"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="7" y="8" width="26" height="24" rx="4"/><circle cx="15" cy="16" r="2.5"/><path d="m8 27 8-7 6 5 5-4 6 6M29 5v9m-4-4 4 4 4-4"/></svg></div>
+              <p class="drop-title">Drop your photo here</p>
+              <p class="drop-description">or choose one from your files</p>
+              <button class="primary-button" type="button" id="choose-photo" aria-describedby="file-hint"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 13V3m-4 4 4-4 4 4M4 12v5h12v-5"/></svg>Upload photo</button>
+              <p class="file-hint" id="file-hint">JPG, PNG or WebP · Up to 20 MB</p>
+            </div>
+            <div class="upload-error" id="upload-error" role="alert" hidden></div>
+            <div class="sample-row"><span>Just exploring?</span><button class="sample-button" type="button" data-sample="cutout-17.png">Try an example <span aria-hidden="true">→</span></button><span class="sample-disclaimer">Synthetic image</span></div>
+          </section>
+
+          <aside class="prep-card" aria-labelledby="prep-title">
+            <div class="prep-card-top"><span class="eyebrow small">BEFORE YOU UPLOAD</span><span class="tiny-square" aria-hidden="true"></span></div>
+            <h2 id="prep-title">A small square.<br>A sense of scale.</h2>
+            <p>Your photo needs our printed marker next to the ring. It tells us how pixels translate into millimetres.</p>
+            <a class="marker-download" href="marker.svg" download="forma-20mm-marker.svg"><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v9m-3-3 3 3 3-3M4 13v4h12v-4"/></svg>Download 20 mm marker</span><span aria-hidden="true">↗</span></a>
+            <ul class="prep-tips"><li>Print at 100% / actual size</li><li>Lay the ring and marker flat</li><li>Photograph from directly above</li></ul>
+            <button class="text-button guide-trigger prep-guide" type="button">See the photo guide <span aria-hidden="true">→</span></button>
+          </aside>
+        </div>
+
+        <section class="processing-card" id="processing-section" aria-live="polite" hidden>
+          <span class="processing-spinner" aria-hidden="true"></span><div><p class="eyebrow small">A LITTLE SCIENCE, IN YOUR BROWSER</p><h2 id="processing-title">Reading your photograph…</h2><p id="processing-detail">Preparing the image and checking its scale.</p></div>
+          <button class="text-button" type="button" id="cancel-processing">Cancel</button>
+        </section>
+
+        <section class="result-section" id="result-section" aria-labelledby="result-title" hidden>
+          <div class="result-topline"><div><p class="eyebrow small" id="result-eyebrow">YOUR MEASUREMENT</p><h2 id="result-title">A closer look at your fit.</h2></div><button class="secondary-button" type="button" id="replace-photo"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 9a7 7 0 0 1 12-4l2 2M17 3v4h-4M17 11a7 7 0 0 1-12 4l-2-2m0 4v-4h4"/></svg>New photo</button></div>
+          <div class="result-grid">
+            <div class="photo-card"><div class="photo-caption"><span id="photo-name">Your photograph</span><span id="sample-badge" hidden>Synthetic example</span></div><div class="canvas-wrap"><canvas id="photo-canvas" aria-label="Your uploaded photograph"></canvas></div><div class="photo-legend"><span id="marker-legend" hidden><i class="legend-dot marker-dot"></i>20 mm marker</span><span id="ring-legend" hidden><i class="legend-dot ring-dot"></i>Inner boundary</span><span class="scale-label" id="scale-label"></span></div></div>
+            <div class="measurement-card" id="measurement-card">
+              <span class="result-status" id="result-status"><span></span>Measurement estimated</span>
+              <p class="value-label">Inside diameter</p><div class="diameter-line"><span id="diameter-value">—</span><span class="unit">mm</span></div><p class="uncertainty" id="uncertainty-value"></p>
+              <div class="size-row"><div><span class="value-label">Closest US ring size</span><p class="size-number" id="size-value">—</p></div><button class="text-button" id="sizing-trigger" type="button">Size chart <span aria-hidden="true">↗</span></button></div>
+              <p class="size-note" id="size-note">Rounded to the nearest entry in the size chart.</p>
+              <div class="result-caveat"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M10 9v5m0-8v1"/></svg><p>An estimate, not a certified measurement. The uncertainty model still needs validation on independently measured objects.</p></div>
+            </div>
+            <div class="retake-panel" id="retake-panel" hidden><span class="retake-icon" aria-hidden="true">↻</span><p class="eyebrow small">LET’S GET A CLEARER PICTURE</p><h3 id="retake-title">This photo needs another try.</h3><p id="retake-reason"></p><p class="retake-guidance" id="retake-guidance"></p><button class="primary-button" type="button" id="retake-upload">Choose another photo <span aria-hidden="true">→</span></button></div>
+          </div>
+          <div class="checks-and-metrics"><div class="checks" id="checks-list" aria-label="Image quality checks"></div><div class="metrics"><span><strong id="processing-time">—</strong> to result</span><span><strong>$0</strong> paid API usage</span><button class="text-button" type="button" id="download-result">Save report <span aria-hidden="true">↓</span></button></div></div>
+          <p class="metrics-footnote" id="metrics-footnote">Time includes image decoding, engine preparation and measurement on this device. Hosting, bandwidth and your device’s resources are separate.</p>
+        </section>
+      </section>
+
+      <section class="principles" aria-label="How the measurement works"><article><span class="principle-icon"><svg viewBox="0 0 26 26" aria-hidden="true"><rect x="5" y="5" width="16" height="16" rx="1"/><path d="M9 2v6m8-6v6M9 18v6m8-6v6M2 9h6m-6 8h6m10-8h6m-6 8h6"/></svg></span><div><h3>A known reference</h3><p>A 20 mm marker sets the scale. No manual calibration or diameter entry.</p></div></article><article><span class="principle-icon"><svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="8"/><path d="M2 13h22M13 2v22"/></svg></span><div><h3>The inside matters</h3><p>We look for the inner edge of one ring, photographed flat from above.</p></div></article><article><span class="principle-icon"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="m13 4 10 17H3zM13 10v5m0 2v1"/></svg></span><div><h3>Clarity over certainty</h3><p>When a photo can’t support a useful estimate, we ask you to try again.</p></div></article></section>
+
+      <details class="method-details"><summary><span>About this prototype &amp; its limits</span><span class="summary-plus" aria-hidden="true">+</span></summary><div class="method-content"><p>This prototype supports one complete, clearly visible circular ring beside the supplied marker, on a plain, light, matte surface. Use a sharp photo, even light and a near-overhead view. Keep both objects on the same plane and leave space between them.</p><p>Reflective or very pale rings, strong shadows, stones obscuring the opening, patterned backgrounds, tilted or deformed rings, multiple objects and significant lens distortion can make measurement unreliable. A correctly printed and independently checked marker is essential.</p><p><strong>Validation status:</strong> the included examples are synthetic engineering fixtures. They test the processing flow; they do not establish accuracy on real photographs. Physical validation with at least two independently measured objects is still required. Estimated uncertainty is provisional.</p><p>All image processing runs locally in your browser with OpenCV.js. There are no paid recognition, reasoning or upload operations per photo. Hosting and bandwidth are separate from the displayed API cost.</p><div class="extra-samples"><span>Explore the test cases:</span><button class="sample-button" type="button" data-sample="cutout-17.png">17 mm synthetic cut-out</button><button class="sample-button" type="button" data-sample="cutout-20.png">20 mm synthetic cut-out</button><button class="sample-button" type="button" data-sample="missing-marker.png">Missing marker</button></div></div></details>
+    </main>
+    <footer class="site-footer"><span class="footer-brand">forma.</span><p>A thoughtful estimate. A more informed fit.</p><span>Experimental prototype <span class="footer-dot">·</span> 2026</span></footer>
+  </div>
+
+  <dialog id="guide-dialog" class="guide-dialog" aria-labelledby="guide-title"><button class="dialog-close" type="button" data-close-dialog aria-label="Close photo guide">×</button><p class="eyebrow small">A GOOD PHOTO MAKES THE DIFFERENCE</p><h2 id="guide-title">Set up for a better estimate.</h2><div class="guide-diagram" aria-label="A ring and a printed marker placed apart on the same flat surface, viewed directly from above"><svg viewBox="0 0 440 175" aria-hidden="true"><rect x="28" y="20" width="384" height="132" rx="8" fill="#fffefa" stroke="#dddcd0"/><circle cx="143" cy="85" r="40" fill="none" stroke="#85927e" stroke-width="11"/><circle cx="143" cy="85" r="33" fill="none" stroke="#b39154" stroke-dasharray="3 3"/><rect x="280" y="59" width="54" height="54" fill="#213e35"/><path d="M289 68h9v9h-9zm18 0h18v9h-18zm-9 9h9v18h-9zm18 9h9v18h-9zm-27 9h9v9h-9z" fill="#fffefa"/><path d="M280 126h54m-54-4v8m54-8v8" stroke="#7a8b72"/><text x="307" y="143" text-anchor="middle" fill="#65735e" font-family="system-ui" font-size="10">20 mm</text><path d="M217 85h36m-6-4 6 4-6 4m-24-8-6 4 6 4" stroke="#a5ab9a" fill="none"/></svg></div><ol class="guide-list"><li><span>01</span><div><h3>Print the actual-size marker</h3><p>Download the SVG and print at 100% / actual size. Turn off “fit to page”. Check that the black square’s outside edges measure exactly 20 × 20 mm with a ruler.</p></div></li><li><span>02</span><div><h3>Lay everything flat</h3><p>Use one ring with a clearly visible opening on a plain, light background. Put the marker next to it on the same surface, without touching or overlapping.</p></div></li><li><span>03</span><div><h3>Photograph from directly above</h3><p>Keep the phone parallel to the surface. Use soft, even light, avoid shadows and reflections, and make sure both objects are fully in frame and in focus.</p></div></li><li><span>04</span><div><h3>Upload your finished photograph</h3><p>Choose a JPG, PNG or WebP. We’ll detect the reference and the ring automatically. Your photo stays on your device.</p></div></li></ol><a class="primary-button dialog-download" href="marker.svg" download="forma-20mm-marker.svg">Download marker <span aria-hidden="true">↓</span></a></dialog>
+
+  <dialog id="sizing-dialog" class="sizing-dialog" aria-labelledby="sizing-title"><button class="dialog-close" type="button" data-close-dialog aria-label="Close size chart">×</button><p class="eyebrow small">DIAMETER TO SIZE</p><h2 id="sizing-title">A guide to your closest fit.</h2><p class="dialog-intro">We choose the chart entry with the smallest difference from your estimated inside diameter. Exact ties round up. We don’t extrapolate beyond the chart.</p><p class="chart-source" id="chart-source"></p><div class="table-scroll"><table><thead><tr><th scope="col">US size</th><th scope="col">Inside diameter</th></tr></thead><tbody id="sizing-table"></tbody></table></div><p class="chart-footnote">Different makers can use slightly different size tables. This photo estimate does not account for band width, finger shape or personal fit preferences.</p></dialog>
+  <div class="visually-hidden" aria-live="polite" id="status-announcement"></div>
+</body>
+</html>

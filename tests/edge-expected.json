@@ -1,0 +1,51 @@
+{
+  "type": "synthetic-transformed-fixtures",
+  "notice": "Transformed analytic pixels; not real photographs, independent object measurements, or evidence of physical accuracy.",
+  "source": "web/samples/cutout-17.png",
+  "sourceSha256": "030cfcf3b8bcad68d78aaf451fc3a450192f10acd26243a1769616f132ed2fa3",
+  "expectedOutcomesRecordedBeforeEvaluation": true,
+  "fixtures": [
+    {
+      "file": "edge-rotation-90.png",
+      "status": "ok",
+      "diameterMm": 17,
+      "toleranceMm": 0.4,
+      "transform": "Exact 90-degree clockwise rotation, no resampling"
+    },
+    {
+      "file": "edge-rotation-27.png",
+      "status": "ok",
+      "diameterMm": 17,
+      "toleranceMm": 0.4,
+      "transform": "27-degree clockwise rotation; bilinear resampling on an expanded canvas"
+    },
+    {
+      "file": "edge-tiny-marker.png",
+      "status": "retake",
+      "transform": "Whole image downsampled to 30%; marker side is 60 pixels, below the documented 80-pixel minimum"
+    },
+    {
+      "file": "edge-two-markers.png",
+      "status": "retake",
+      "transform": "Second exact marker copied into a blank region; multiple scale references are ambiguous"
+    },
+    {
+      "file": "edge-mild-perspective.png",
+      "status": "ok",
+      "diameterMm": 17,
+      "toleranceMm": 0.45,
+      "transform": "Shared planar homography with mild, near-overhead projective deformation",
+      "homography": [
+        1,
+        0.01,
+        30,
+        0.015,
+        1,
+        35,
+        0.000025,
+        0.000015,
+        1
+      ]
+    }
+  ]
+}

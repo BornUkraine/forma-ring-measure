@@ -1,0 +1,15 @@
+{
+  "name": "forma-ring-measure",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Automatic browser-local ring measurement from an uploaded photograph and a 20 mm marker",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "build": "node scripts/build.mjs",
+    "fixtures": "node scripts/generate-fixtures.cjs",
+    "fixtures:edges": "node scripts/generate-edge-fixtures.cjs",
+    "test": "node --test tests/*.test.cjs",
+    "evaluate": "node scripts/evaluate.cjs"
+  },
+  "devDependencies": { "pngjs": "7.0.0" }
+}

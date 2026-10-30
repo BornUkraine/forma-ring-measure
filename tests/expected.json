@@ -1,0 +1,101 @@
+{
+  "type": "synthetic-analytic-fixtures",
+  "notice": "Generated circles and encoded markers. These are NOT physical object photographs or independent caliper measurements. Physical validation is pending.",
+  "expectedOutcomesRecordedBeforeEvaluation": true,
+  "geometry": {
+    "imageWidth": 1000,
+    "imageHeight": 700,
+    "markerSideMm": 20,
+    "pixelsPerMm": 10
+  },
+  "fixtures": [
+    {
+      "file": "cutout-17.png",
+      "status": "ok",
+      "diameterMm": 17,
+      "toleranceMm": 0.35,
+      "conditions": {
+        "diameter": 17
+      }
+    },
+    {
+      "file": "cutout-20.png",
+      "status": "ok",
+      "diameterMm": 20,
+      "toleranceMm": 0.35,
+      "conditions": {
+        "diameter": 20
+      }
+    },
+    {
+      "file": "cutout-18-noisy.png",
+      "status": "ok",
+      "diameterMm": 18,
+      "toleranceMm": 0.4,
+      "conditions": {
+        "diameter": 18,
+        "noise": 14
+      }
+    },
+    {
+      "file": "missing-marker.png",
+      "status": "retake",
+      "conditions": {
+        "noMarker": true
+      }
+    },
+    {
+      "file": "wrong-square.png",
+      "status": "retake",
+      "conditions": {
+        "plainSquare": true
+      }
+    },
+    {
+      "file": "blurred.png",
+      "status": "retake",
+      "conditions": {
+        "blur": 12
+      }
+    },
+    {
+      "file": "tilted.png",
+      "status": "retake",
+      "conditions": {
+        "ellipse": 0.65,
+        "markerSquash": 0.65
+      }
+    },
+    {
+      "file": "two-rings.png",
+      "status": "retake",
+      "conditions": {
+        "rings": [
+          {
+            "cx": 550,
+            "cy": 250,
+            "d": 17
+          },
+          {
+            "cx": 800,
+            "cy": 490,
+            "d": 18
+          }
+        ]
+      }
+    },
+    {
+      "file": "clipped-ring.png",
+      "status": "retake",
+      "conditions": {
+        "rings": [
+          {
+            "cx": 985,
+            "cy": 350,
+            "d": 17
+          }
+        ]
+      }
+    }
+  ]
+}
