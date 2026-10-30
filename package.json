@@ -9,7 +9,8 @@
     "fixtures": "node scripts/generate-fixtures.cjs",
     "fixtures:edges": "node scripts/generate-edge-fixtures.cjs",
     "test": "node --test tests/*.test.cjs",
-    "evaluate": "node scripts/evaluate.cjs"
+    "evaluate": "node scripts/evaluate.cjs",
+    "test:real": "node scripts/evaluate-real.cjs tests/real-photo-manifest.json --engine"
   },
-  "devDependencies": { "pngjs": "7.0.0" }
+  "devDependencies": { "pngjs": "7.0.0", "sharp": "0.35.5" }
 }

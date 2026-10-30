@@ -23,6 +23,12 @@ Verified on2026-10-31, Europe/Kyiv, using Node24.5.0 and the connected Chromium-
 
 Browser observed timings describe these exact local operations only. They do not establish a production latency target. The first operation includes local runtime initialization; this localhost test does not simulate mobile bandwidth downloading the roughly10 MB OpenCV asset.
 
+## Landing animation update
+
+Added a locally rendered WebGL wedding band with a bevelled profile, warm studio reflections, gentle rotation/tilt and a soft shadow. The mobile layout includes the scene at200 CSS pixels high. An SVG illustration remains available when WebGL is unavailable.
+
+Observed in the browser: renderer enters `webgl`, motion starts as `playing`, Pause changes the state to `paused` and its accessible label to Play; Play resumes `playing`. Reduced-motion handling and visibility/intersection suspension are implemented in the isolated renderer. The ordinary synthetic example still produces17.0 mm through the original upload/worker flow after this decoration was added. `node --check web/hero-ring.js` passed. Desktop and narrow mobile compositions were visually checked.
+
 ## Remaining evidence
 
 Independent measurements and photographs of two physical objects are **pending**. Follow `PHYSICAL-VALIDATION.md`, record expected outcomes before testing, and add the actual results before representing the complete assignment evidence as finished. The video script is supplied; an actual walkthrough recording and reviewer access still need to be arranged for submission.

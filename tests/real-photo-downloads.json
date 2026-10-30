@@ -1,0 +1,40 @@
+{
+  "downloads": [
+    {
+      "file": "commons-white-gold-ring.jpg",
+      "bytes": 928563,
+      "sha256": "88a4d29230497f910073948928cc92e10bb2bbbdacc1515d898288d5a0e4b589",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Weddingring.JPG",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/14/Weddingring.JPG",
+      "downloadedAt": "2026-10-30T22:59:47.427Z",
+      "localModification": "None; exact downloaded bytes retained. Publisher versions may have their own documented edits."
+    },
+    {
+      "file": "commons-traditional-gold-ring.jpg",
+      "bytes": 369545,
+      "sha256": "2913ebacaca343dfa1acf828e833c1b62ede833ff55c998367f7432bcbbf0dc1",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Traditional_Wedding_Ring.jpg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/56/Traditional_Wedding_Ring.jpg",
+      "downloadedAt": "2026-10-30T22:59:49.748Z",
+      "localModification": "None; exact downloaded bytes retained. Publisher versions may have their own documented edits."
+    },
+    {
+      "file": "commons-two-wedding-rings.jpg",
+      "bytes": 265065,
+      "sha256": "99f1ad1889c5eb1d7c3293228db565b375b6929fafd612b9f8f46d861ad0eb35",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Wedding_rings.jpg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Wedding_rings.jpg",
+      "downloadedAt": "2026-10-30T22:59:51.538Z",
+      "localModification": "None; exact downloaded bytes retained. Publisher versions may have their own documented edits."
+    },
+    {
+      "file": "commons-medieval-ring.jpg",
+      "bytes": 916700,
+      "sha256": "16ed44339641a0a61e9d196d97117b4139b7614491bd60e0c1e308d43460e6b4",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gold_medieval_ring,_top_view_(FindID_132061).jpg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Gold_medieval_ring%2C_top_view_%28FindID_132061%29.jpg",
+      "downloadedAt": "2026-10-30T23:05:14.597Z",
+      "localModification": "None; exact downloaded bytes retained. Publisher versions may have their own documented edits."
+    }
+  ]
+}

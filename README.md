@@ -45,6 +45,7 @@ Complete the real-object protocol in [docs/PHYSICAL-VALIDATION.md](docs/PHYSICAL
 - `web/measurement-worker.js`: lazy OpenCV initialization and background processing.
 - `web/engine.js`: automatic marker recognition, constrained planar homography, inner-contour fit and quality gates. It receives only pixels and dimensions, never filenames or expected answers.
 - `web/sizing.js`: documented Tiffany table and explicit nearest-entry rule.
+- `web/hero-ring.js` and `web/hero-ring.css`: decorative studio-lit 3D gold band on the landing page, including mobile, pause/play and reduced-motion support. Rendering runs locally without additional packages or asset downloads and suspends when the scene is not visible.
 - `web/vendor/opencv.js`: checked-in OpenCV4.10.0, packaged by `@techstark/opencv-js@4.10.0-release.1`; Apache2.0 licence beside it.
 - `scripts/`: static server/build, reproducible fixtures and evaluation.
 - `tests/expected.json`: separate analytic ground truth, never requested by the app.
@@ -58,3 +59,17 @@ The UI measures the actual operation from upload/decode through useful result; c
 No per-image paid recognition, reasoning, speech, retry or intermediary services are called: **USD0 in paid API charges per image** under this architecture. This is not a claim of zero overall resource cost. Device energy is not priced. Hosting, bandwidth (including the roughly10 MB runtime) and development tooling costs are separate. No free API credits are assumed.
 
 See [docs/ALGORITHM.md](docs/ALGORITHM.md), [docs/SOURCES.md](docs/SOURCES.md) and [docs/DELIVERY.md](docs/DELIVERY.md). The hosted preview is private by default; reviewer access must be arranged before submission.
+
+## Real internet photograph checks
+
+Four original JPEG files from Wikimedia Commons are retained in `tests/real-inputs/`, with source pages, author credits, licence links and expected outcomes in `tests/real-photo-manifest.json`. `tests/real-photo-downloads.json` records the original-file SHA256 values. Images are not composited with a marker or otherwise changed on disk.
+
+The development-only decoder for this check is pinned to `sharp0.35.5` (Node20.9+ required for this optional test tooling); it is not shipped to the browser. To reproduce:
+
+```sh
+npm ci
+node scripts/download-real-photos.mjs
+npm run test:real
+```
+
+This runs the unchanged application measurement engine on actual decoded photograph pixels. It explicitly reports that browser UI automation was unavailable during this follow-up and that its timings are Node read/decode/engine timings, not browser end-to-end measurements. Resampling by Sharp can differ from browser canvas. The run checks safe refusal on unsupported images, not real-world diameter accuracy. See `docs/REAL-PHOTO-VALIDATION.md` and `docs/REAL-PHOTO-RESULTS.json`.

@@ -1,0 +1,63 @@
+{
+  "preparedOn": "2026-10-31",
+  "expectedOutcomesRecordedBeforeEvaluation": true,
+  "purpose": "Real JPEG pixel decoding and unchanged measurement-core refusal validation; NOT a browser end-to-end or diameter-accuracy benchmark",
+  "applicationUrl": "https://forma-ring-lab-eugene-2026.realove-io.chatgpt.site/",
+  "applicationSourceCommit": "3b5dee78f876d0b80d4a18436d83c5751518c78d",
+  "baseDir": "./real-inputs",
+  "images": [
+    {
+      "file": "commons-white-gold-ring.jpg",
+      "title": "White gold wedding ring",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Weddingring.JPG",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/14/Weddingring.JPG",
+      "author": "CLW; current Commons version contrast-adjusted by Hohum",
+      "license": "Public domain dedication by CLW",
+      "licenseUrl": "https://commons.wikimedia.org/wiki/File:Weddingring.JPG#Licensing",
+      "expectedStatus": "retake",
+      "expectedCode": "missing_marker",
+      "groundTruth": null,
+      "reason": "Actual ring worn on a finger: opening occluded, no supplied 20 mm encoded marker and no independently documented inner diameter"
+    },
+    {
+      "file": "commons-traditional-gold-ring.jpg",
+      "title": "Traditional 18K gold wedding ring",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Traditional_Wedding_Ring.jpg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/56/Traditional_Wedding_Ring.jpg",
+      "author": "A Minty Penguin",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "expectedStatus": "retake",
+      "expectedCode": "missing_marker",
+      "groundTruth": null,
+      "reason": "Actual ring worn on a finger: opening occluded, no supplied 20 mm encoded marker and no independently documented inner diameter"
+    },
+    {
+      "file": "commons-two-wedding-rings.jpg",
+      "title": "Two 14-carat gold wedding rings",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Wedding_rings.jpg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Wedding_rings.jpg",
+      "author": "Jeff Belmonte; current Commons version denoised by Hohum",
+      "license": "CC BY 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+      "expectedStatus": "retake",
+      "expectedCode": "missing_marker",
+      "groundTruth": null,
+      "reason": "Two rings and no supplied 20 mm encoded marker; no independently documented inner diameters"
+    },
+    {
+      "file": "commons-medieval-ring.jpg",
+      "title": "Medieval gold ring, top view, FindID 132061",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gold_medieval_ring,_top_view_(FindID_132061).jpg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Gold_medieval_ring%2C_top_view_%28FindID_132061%29.jpg",
+      "author": "Colchester Museums, Caroline McDonald; attribution The Portable Antiquities Scheme / The Trustees of the British Museum",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "expectedStatus": "retake",
+      "expectedCode": "missing_marker",
+      "groundTruth": null,
+      "publishedExternalDiameterMm": 17.3,
+      "reason": "Top view of a real ring, but no supplied encoded marker. Published 17.3 mm is explicitly EXTERNAL diameter, not independent internal-diameter ground truth. The hexagonal hoop is additionally outside the circular-opening scope."
+    }
+  ]
+}
