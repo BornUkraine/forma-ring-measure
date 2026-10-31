@@ -16,7 +16,9 @@ See `SYNTHETIC-RESULTS.json` for actual expected/observed results, absolute diam
 
 **Exploratory follow-up:** private real photographs of a broad washer and a thick ring were tested. A candidate-width filter was corrected without changing the quality checks. Two washer photographs were accepted in the ordinary browser flow, displaying10.0 mm and9.8 mm; the ring inputs were declined. Full observations and evidence limits are summarized in `VERIFICATION.md`. Original user photos and detailed reports remain private local evidence rather than public repository fixtures.
 
-**Outstanding:** complete the protocol for at least two independently measured physical objects with a physically verified marker, record raw ground truth separately and retain the expected/actual outcomes and errors. Confirm the final print scale and obtain a second accepted physical-object case before treating the requested accuracy evidence as complete. Then revise supported conditions and any uncertainty claim from that evidence. There are currently no invented caliper readings or fabricated real photos.
+The final18 ring photographs (`20-39-51` batch) were evaluated with unchanged engine1.1.0 at commit `6547ca67a4988f6095772ac83dfa1b133a925ca9`. All markers passed, but every input returned `ring_not_found`. Read-only analysis exposed a segmentation limitation under inner-wall shadows; these refusals do not prove that all photographs were unsuitable. No diameter or accuracy result was manufactured.
+
+**Testing closed:** physical testing ended after this final batch. Only the washer yielded diameter estimates; the second physical object did not. The final print scale remains unverified, so physical accuracy evidence is incomplete. The displayed uncertainty is still provisional and unvalidated. `PHYSICAL-VALIDATION.md` documents the unfinished protocol; no further physical tests are included in this delivery.
 
 The static demo/repository can be reviewed now. A complete hiring submission additionally needs reviewer access, real-object evidence and a recorded walkthrough. A ready-to-record script is supplied in `VIDEO-SCRIPT.md`. No submission form has been sent.
 
