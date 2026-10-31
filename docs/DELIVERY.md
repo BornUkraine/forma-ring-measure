@@ -14,7 +14,9 @@ Date:2026-10-31 (Europe/Kyiv). New prototype built for the supplied assignment. 
 
 See `SYNTHETIC-RESULTS.json` for actual expected/observed results, absolute diameter errors and timings. All included generated images are synthetic. Analytic ground truth was specified in the fixture generator before evaluation. They are not evidence of real-object measurement accuracy.
 
-**Outstanding:** independently measure at least two physical objects, photograph them with the verified marker, record raw ground truth separately and run the supplied physical-validation protocol. Add the resulting original images, expected/actual results and errors. Then revise supported conditions and any uncertainty claim from that evidence. There are currently no invented caliper readings or fabricated real photos.
+**Exploratory follow-up:** private real photographs of a broad washer and a thick ring were tested. A candidate-width filter was corrected without changing the quality checks. Two washer photographs were accepted in the ordinary browser flow, displaying10.0 mm and9.8 mm; the ring inputs were declined. Full observations and evidence limits are summarized in `VERIFICATION.md`. Original user photos and detailed reports remain private local evidence rather than public repository fixtures.
+
+**Outstanding:** complete the protocol for at least two independently measured physical objects with a physically verified marker, record raw ground truth separately and retain the expected/actual outcomes and errors. Confirm the final print scale and obtain a second accepted physical-object case before treating the requested accuracy evidence as complete. Then revise supported conditions and any uncertainty claim from that evidence. There are currently no invented caliper readings or fabricated real photos.
 
 The static demo/repository can be reviewed now. A complete hiring submission additionally needs reviewer access, real-object evidence and a recorded walkthrough. A ready-to-record script is supplied in `VIDEO-SCRIPT.md`. No submission form has been sent.
 
