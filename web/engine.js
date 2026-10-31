@@ -23,6 +23,8 @@
     maxMarkerAngleDeviation: 14,
     minDiameterMm: 8,
     maxDiameterMm: 30,
+    // A broad round band/washer may have an outer diameter up to 3× its opening.
+    maxOuterToInnerAreaRatio: 9,
     minCircleAxisRatio: 0.93,
     maxFitResidual: 0.035,
     minEdgeContrast: 32,
@@ -186,7 +188,7 @@
           try {
             if (contour.rows < 12 || parent.rows < 12) continue;
             const area = Math.abs(cv.contourArea(contour)), parentArea = Math.abs(cv.contourArea(parent));
-            if (area < 200 || parentArea / area < 1.035 || parentArea / area > 4.5) continue;
+            if (area < 200 || parentArea / area < 1.035 || parentArea / area > LIMITS.maxOuterToInnerAreaRatio) continue;
             const imageEllipse = cv.fitEllipse(contour), imageCenter = imageEllipse.center;
             if (insideQuad(imageCenter, marker.corners)) continue;
             const rect = cv.boundingRect(parent);
@@ -218,7 +220,7 @@
   function analyze(cv, imageData) {
     const start = typeof performance !== 'undefined' ? performance.now() : Date.now();
     const checks = [];
-    const metrics = { engine: 'OpenCV.js / RingMeasure 1.0', width: imageData && imageData.width, height: imageData && imageData.height, paidApiCalls: 0, paidApiCostUsd: 0 };
+    const metrics = { engine: 'OpenCV.js / RingMeasure 1.1', width: imageData && imageData.width, height: imageData && imageData.height, paidApiCalls: 0, paidApiCostUsd: 0 };
     const complete = (result) => ({ ...result, checks, metrics: { ...metrics, processingMs: Math.round((typeof performance !== 'undefined' ? performance.now() : Date.now()) - start) } });
     const reject = (code, message, guidance, extra = {}) => complete({ status: 'retake', code, message, guidance, ...extra });
     const check = (label, pass, detail) => checks.push({ label, pass, detail });
@@ -280,5 +282,5 @@
     } finally { for (let i = mats.length - 1; i >= 0; i--) mats[i].delete(); }
   }
 
-  return Object.freeze({ analyze, MARKER_SIDE_MM, MARKER_PATTERN, LIMITS, version: '1.0.0' });
+  return Object.freeze({ analyze, MARKER_SIDE_MM, MARKER_PATTERN, LIMITS, version: '1.1.0' });
 });

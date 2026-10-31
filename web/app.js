@@ -337,7 +337,7 @@
       roundingRule: window.RingSizing ? window.RingSizing.roundingRule : null,
       timing: { timeToResultMs: Math.round(elapsed), includes: 'Image decoding, local engine startup and measurement; excludes file selection.' },
       variableCost: { paidApiCalls: 0, paidApiCostUsd: 0, hostingAndBandwidth: 'Separate; provider-dependent', deviceResources: 'Not metered by this application' },
-      validationStatus: 'Synthetic engineering examples only. Real-photo accuracy and uncertainty require independent physical validation.'
+      validationStatus: 'Physical accuracy and uncertainty remain unvalidated. Results assume a physically verified 20 mm marker and require comparison with independent measurements.'
     };
     populateSizing();
   }

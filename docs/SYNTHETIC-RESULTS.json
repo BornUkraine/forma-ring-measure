@@ -1,5 +1,5 @@
 {
-  "runAt": "2026-10-30T22:46:11.151Z",
+  "runAt": "2026-10-31T18:14:18.668Z",
   "runtime": "v24.5.0",
   "engine": "OpenCV4.10.0 / Forma",
   "inputType": "synthetic-analytic-fixtures",
@@ -20,9 +20,9 @@
       "expectedToleranceMm": 0.35,
       "rejectionCode": null,
       "passed": true,
-      "decodeMs": 44.3,
-      "processingMs": 80,
-      "totalMs": 124.3,
+      "decodeMs": 51.4,
+      "processingMs": 102.4,
+      "totalMs": 153.8,
       "paidApiCostUsd": 0
     },
     {
@@ -36,9 +36,9 @@
       "expectedToleranceMm": 0.35,
       "rejectionCode": null,
       "passed": true,
-      "decodeMs": 37.8,
-      "processingMs": 42,
-      "totalMs": 79.8,
+      "decodeMs": 40.7,
+      "processingMs": 39.6,
+      "totalMs": 80.3,
       "paidApiCostUsd": 0
     },
     {
@@ -52,9 +52,9 @@
       "expectedToleranceMm": 0.4,
       "rejectionCode": null,
       "passed": true,
-      "decodeMs": 34.9,
-      "processingMs": 140.6,
-      "totalMs": 175.5,
+      "decodeMs": 45.3,
+      "processingMs": 162.7,
+      "totalMs": 207.9,
       "paidApiCostUsd": 0
     },
     {
@@ -68,9 +68,9 @@
       "expectedToleranceMm": null,
       "rejectionCode": "missing_marker",
       "passed": true,
-      "decodeMs": 184.2,
-      "processingMs": 38.2,
-      "totalMs": 222.4,
+      "decodeMs": 49.8,
+      "processingMs": 22.5,
+      "totalMs": 72.3,
       "paidApiCostUsd": 0
     },
     {
@@ -84,9 +84,9 @@
       "expectedToleranceMm": null,
       "rejectionCode": "missing_marker",
       "passed": true,
-      "decodeMs": 37.1,
-      "processingMs": 23.9,
-      "totalMs": 61,
+      "decodeMs": 34.8,
+      "processingMs": 22.9,
+      "totalMs": 57.7,
       "paidApiCostUsd": 0
     },
     {
@@ -100,9 +100,9 @@
       "expectedToleranceMm": null,
       "rejectionCode": "blur",
       "passed": true,
-      "decodeMs": 22.4,
-      "processingMs": 37,
-      "totalMs": 59.4,
+      "decodeMs": 21.3,
+      "processingMs": 37.6,
+      "totalMs": 58.9,
       "paidApiCostUsd": 0
     },
     {
@@ -116,9 +116,9 @@
       "expectedToleranceMm": null,
       "rejectionCode": "perspective",
       "passed": true,
-      "decodeMs": 31,
-      "processingMs": 25.2,
-      "totalMs": 56.2,
+      "decodeMs": 32.5,
+      "processingMs": 25.7,
+      "totalMs": 58.1,
       "paidApiCostUsd": 0
     },
     {
@@ -132,9 +132,9 @@
       "expectedToleranceMm": null,
       "rejectionCode": "multiple_rings",
       "passed": true,
-      "decodeMs": 32.4,
-      "processingMs": 34.4,
-      "totalMs": 66.8,
+      "decodeMs": 44.5,
+      "processingMs": 36.3,
+      "totalMs": 80.8,
       "paidApiCostUsd": 0
     },
     {
@@ -149,8 +149,8 @@
       "rejectionCode": "ring_not_found",
       "passed": true,
       "decodeMs": 27.8,
-      "processingMs": 35.9,
-      "totalMs": 63.7,
+      "processingMs": 27.5,
+      "totalMs": 55.3,
       "paidApiCostUsd": 0
     },
     {
@@ -164,9 +164,9 @@
       "expectedToleranceMm": 0.4,
       "rejectionCode": null,
       "passed": true,
-      "decodeMs": 29.1,
-      "processingMs": 27.9,
-      "totalMs": 57,
+      "decodeMs": 29.9,
+      "processingMs": 27.6,
+      "totalMs": 57.4,
       "paidApiCostUsd": 0
     },
     {
@@ -180,9 +180,9 @@
       "expectedToleranceMm": 0.4,
       "rejectionCode": null,
       "passed": true,
-      "decodeMs": 43.6,
-      "processingMs": 68.3,
-      "totalMs": 112,
+      "decodeMs": 42.2,
+      "processingMs": 56,
+      "totalMs": 98.2,
       "paidApiCostUsd": 0
     },
     {
@@ -196,9 +196,9 @@
       "expectedToleranceMm": null,
       "rejectionCode": "low_resolution",
       "passed": true,
-      "decodeMs": 3.1,
-      "processingMs": 2.2,
-      "totalMs": 5.4,
+      "decodeMs": 3.8,
+      "processingMs": 2.3,
+      "totalMs": 6.1,
       "paidApiCostUsd": 0
     },
     {
@@ -212,9 +212,9 @@
       "expectedToleranceMm": null,
       "rejectionCode": "multiple_markers",
       "passed": true,
-      "decodeMs": 30.9,
-      "processingMs": 33.7,
-      "totalMs": 64.6,
+      "decodeMs": 34.3,
+      "processingMs": 24.4,
+      "totalMs": 58.7,
       "paidApiCostUsd": 0
     },
     {
@@ -228,9 +228,9 @@
       "expectedToleranceMm": 0.45,
       "rejectionCode": null,
       "passed": true,
-      "decodeMs": 34.8,
-      "processingMs": 45.3,
-      "totalMs": 80,
+      "decodeMs": 33,
+      "processingMs": 29.7,
+      "totalMs": 62.8,
       "paidApiCostUsd": 0
     }
   ]

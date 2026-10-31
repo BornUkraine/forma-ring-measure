@@ -35,7 +35,7 @@ npm run build
 
 **Physical accuracy is not yet validated.** The included examples are explicitly labelled synthetic geometry, not photographs of independently measured objects. On these idealised inputs, small numerical error only verifies the geometry pipeline. It does not establish performance on reflective jewellery, shadows, printer error or real camera optics.
 
-The displayed uncertainty is an engineering estimate, not a confidence interval or tested physical error bound. The prototype intentionally supports a narrow case: a well-defined dark/contrasting band on a light matte surface. Bright reflective rings, stones, transparent bands, patterned backgrounds, fingers, non-circular/raised rings and strong perspective may be rejected or unreliable. Objects must really share a plane; a single image cannot prove that assumption.
+The displayed uncertainty is an engineering estimate, not a confidence interval or tested physical error bound. The prototype intentionally supports a narrow case: a well-defined dark/contrasting band on a light matte surface. Broad circular bands and flat washers can be detected when their outer-to-inner diameter ratio is at most 3:1; supplementary washer measurements do not establish accuracy on jewellery. Bright reflective rings, stones, transparent bands, patterned backgrounds, fingers, non-circular/raised rings and strong perspective may be rejected or unreliable. Objects must really share a plane; a single image cannot prove that assumption.
 
 Complete the real-object protocol in [docs/PHYSICAL-VALIDATION.md](docs/PHYSICAL-VALIDATION.md) with at least two independently measured objects and one unsupported image before making any physical accuracy claim or calling the hiring submission complete.
 

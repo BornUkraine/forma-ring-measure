@@ -4,7 +4,7 @@ Verified on2026-10-31, Europe/Kyiv, using Node24.5.0 and the connected Chromium-
 
 ## Automated checks
 
-`npm test`: **20 passed,0 failed**. These include14 image cases, repeated anonymous pixel input, all21 table entries and20 midpoint boundaries, invalid/out-of-range conversions, and both ready/deferred worker initialization branches. The worker regression specifically exercises Emscripten's self-resolving module without allowing a recursive-assimilation hang.
+`npm test`: **28 passed,0 failed**. These include14 original image cases,8 additional broad-annulus pixel cases, repeated anonymous pixel input, all21 table entries and20 midpoint boundaries, invalid/out-of-range conversions, and both ready/deferred worker initialization branches. The worker regression specifically exercises Emscripten's self-resolving module without allowing a recursive-assimilation hang.
 
 `npm run evaluate`: **14/14 analytic/synthetic image cases match their predefined expectations**. Per-image expected/actual diameter, absolute error, refusal code and measured latency are recorded in `SYNTHETIC-RESULTS.json`. Successful image cases include known17/18/20 mm openings,90°/27° rotations and mild planar perspective. The largest observed error in this small synthetic set is approximately0.27 mm for the projective scene. None of these are physical measurements or a demonstrated real-camera error bound.
 
@@ -28,6 +28,16 @@ Browser observed timings describe these exact local operations only. They do not
 Added a locally rendered WebGL wedding band with a bevelled profile, warm studio reflections, gentle rotation/tilt and a soft shadow. The mobile layout includes the scene at200 CSS pixels high. An SVG illustration remains available when WebGL is unavailable.
 
 Observed in the browser: renderer enters `webgl`, motion starts as `playing`, Pause changes the state to `paused` and its accessible label to Play; Play resumes `playing`. Reduced-motion handling and visibility/intersection suspension are implemented in the isolated renderer. The ordinary synthetic example still produces17.0 mm through the original upload/worker flow after this decoration was added. `node --check web/hero-ring.js` passed. Desktop and narrow mobile compositions were visually checked.
+
+## Exploratory physical-object follow-up
+
+On2026-10-31, five privately supplied photographs of a thick ring and eight of a flat washer were evaluated without modifying their original JPEGs. Reports and overlays are retained locally in ignored `artifacts/`; the private photographs are not included in this repository. This was exploratory debugging, not a preregistered accuracy experiment.
+
+The original detector refused all five ring inputs as noncircular. It also refused all eight washer inputs: six before a stable opening was found and two for blur. Investigation found an arbitrary outer-contour/opening area limit of4.5 excluded the real washer's ratios of approximately4.85–5.18. Version1.1.0 raises that bounded candidate limit to9 (outer/inner diameter ratio3:1). Circularity, concentricity, resolution, sharpness, ambiguity and threshold-agreement checks are unchanged. Eight independent analytic pixel regressions cover two broad circular openings and six unsupported cases; they do not use the user's images or reference diameter.
+
+After the correction, the ordinary browser upload flow accepted two of eight washer photographs: photo6 displayed **10.0 mm ±0.5 mm** and photo7 **9.8 mm ±0.5 mm**, with marker and inner-boundary overlays inspected. The other six were refused for blur. Browser operation times were124–496 ms in this session, including a cold first run. A separate Sharp/core run accepted three inputs (photos2,6,7); photo2 is close to the sharpness cutoff and the browser's different resampling rejected it. These decoder-dependent results are retained separately rather than represented as identical evidence. The five earlier ring photographs remain rejected as noncircular.
+
+The user reported an approximately10 mm washer opening with a ruler. The final printed marker's physical width and height have not yet been confirmed. Therefore the observed agreement is conditional on the required20 mm scale and does not establish physical accuracy, a calibrated error bound or the displayed uncertainty. The10 mm supplementary washer is outside the sourced14.1–22.2 mm size chart, so the interface correctly displays no ring size.
 
 ## Remaining evidence
 
