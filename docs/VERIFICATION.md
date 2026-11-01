@@ -1,5 +1,7 @@
 # Verification record
 
+Mobile follow-up, **2026-11-01**: **51/51 tests and static build pass**. The supplied phone video motivated upload lifecycle fixes, readable mobile controls, immediate results/refusal guidance and ring enlargement. File-chooser uploads, replacement, report download and 360/390/1440 CSS-pixel layouts were checked in desktop Chromium. See [MOBILE-UPLOAD-FIX.md](MOBILE-UPLOAD-FIX.md) for exact outcomes and the physical-phone verification limit. The engine is unchanged.
+
 Latest verification: **2026-11-01, engine 1.2.0**, using Node 24.5.0 and the connected Chromium-based in-app browser. See [JEWELLERY-VALIDATION.md](JEWELLERY-VALIDATION.md) and [JEWELLERY-RESULTS.json](JEWELLERY-RESULTS.json) for all eight new photo outcomes: four measurements, one ambiguity refusal and three unresolved ring detections. All 40 tests and 14 analytic evaluations pass; the 17 available real regression statuses/codes are preserved. Browser uploads, report export, refusal recovery, 390 × 844 mobile and 1440 × 900 wide layouts were checked. The marker and metal-boundary changes are described in [ALGORITHM.md](ALGORITHM.md).
 
 The sections below preserve the **historical 2026-10-31 record**. Their timings and measurements describe those earlier runs, not the current engine.

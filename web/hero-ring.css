@@ -24,3 +24,12 @@
 @media(max-width:760px){.ring-stage{height:245px}.ring-scene-footer{padding:0;gap:5px 14px;min-height:34px}.ring-stage-corner{width:13px;height:13px}.ring-stage-corner.corner-tl{left:15px;top:35px}.ring-stage-corner.corner-br{right:15px;bottom:25px}.ring-scene-caption{font-size:7px;gap:6px}.ring-scene-caption>span{width:13px}.ring-motion-toggle{font-size:7px;min-height:26px}.ring-motion-toggle svg{width:10px;height:10px}}
 @media(max-width:560px){.hero{padding-top:28px;padding-bottom:16px}.hero .privacy-note{margin-top:12px}.hero-ring-visual{display:block;width:100%;margin:4px auto 0}.ring-stage{height:200px;max-width:360px;margin:auto;border-radius:40%;background:radial-gradient(ellipse at 50% 42%,#fff9e87a 0%,#fcf8ec3a 37%,#f6f5ef00 72%)}.ring-scene-footer{gap:15px;min-height:30px;padding:0 2px}.ring-scene-caption{font-size:8px;gap:7px}.ring-scene-caption>span{width:16px}.ring-motion-toggle{font-size:8px;min-height:30px}.ring-motion-toggle svg{width:11px;height:11px}.ring-stage-corner.corner-tl{left:25px;top:24px}.ring-stage-corner.corner-br{right:25px;bottom:20px}}
 @media(max-width:360px){.ring-stage{height:200px}.ring-scene-footer{gap:10px}.ring-scene-caption{font-size:7px}.ring-motion-toggle{font-size:7px}}
+
+.ring-motion-toggle{font-size:12px;min-height:44px;padding:8px 4px}
+/* This stylesheet loads last: keep its decorative display rule from pushing
+   the upload action below the first screen on phones and small tablets. */
+@media(max-width:760px){
+  .hero-ring-visual{display:none}
+  .hero{padding:20px 0}
+  .hero .privacy-note{margin-top:10px}
+}

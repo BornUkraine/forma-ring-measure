@@ -2,6 +2,8 @@
 
 Updated: 2026-11-01 (Europe/Kyiv). Existing Forma / RingMeasure prototype continued for the supplied assignment. The core flow is an existing-photo upload; there is no camera integration.
 
+The [mobile upload follow-up](MOBILE-UPLOAD-FIX.md) records fixes prompted by the supplied phone recording: direct repeat selection, preserved results on picker cancellation, bounded decoding, clearer refusals and readable mobile results. All 51 automated tests pass. Measurement accuracy and support limits are unchanged.
+
 ## What is delivered
 
 - Mobile-friendly English interface, local JPEG/PNG/WebP upload, explicit print/capture instructions, downloadable20 mm encoded marker.

@@ -10,18 +10,24 @@
   const dropzone = $('dropzone');
   const sourceCanvas = document.createElement('canvas');
   const photoCanvas = $('photo-canvas');
+  const annotatedCanvas = document.createElement('canvas');
   const sourceContext = sourceCanvas.getContext('2d', { willReadFrequently: true });
   let worker = null;
   let pending = null;
   let operation = 0;
+  let sampleOperation = 0;
   let lastReport = null;
   let selectedSize = null;
   let currentImage = null;
   let running = false;
+  let cancelDecode = null;
+  let progressTimer = null;
+  let photoView = 'whole';
 
   function announce(message) { $('status-announcement').textContent = message; }
 
   function showSection(name) {
+    document.body.dataset.view = name;
     $('upload-section').hidden = name !== 'upload';
     $('processing-section').hidden = name !== 'processing';
     $('result-section').hidden = name !== 'result';
@@ -29,6 +35,13 @@
     $('result-step').classList.toggle('active', name === 'result');
     document.querySelectorAll('.sample-button').forEach((button) => { button.disabled = name === 'processing'; });
     running = name === 'processing';
+    if (!running && progressTimer) { clearInterval(progressTimer); progressTimer = null; }
+  }
+
+  function focusSection(id) {
+    const section = $(id);
+    section.focus({ preventScroll: true });
+    section.scrollIntoView({ behavior: 'instant', block: 'start' });
   }
 
   function resetWorker(reason) {
@@ -106,46 +119,72 @@
   function validateFile(file) {
     if (!file || !file.size) throw new Error('This file is empty. Please choose a JPG, PNG or WebP photograph.');
     if (file.size > MAX_BYTES) throw new Error('This file is larger than 20 MB. Export a smaller JPG, PNG or WebP and try again.');
-    const allowed = /^(image\/jpeg|image\/png|image\/webp)$/i;
-    const named = /\.(jpe?g|png|webp)$/i;
-    if ((file.type && !allowed.test(file.type)) || (!file.type && !named.test(file.name || ''))) {
-      throw new Error('Choose a JPG, PNG or WebP image. If your photo is HEIC, export it as JPG first.');
-    }
   }
 
   async function decodeFile(file) {
     let image;
     let objectUrl;
+    let element;
+    let abandoned = false;
+    let rejectCancellation;
+    const cancellation = new Promise((_, reject) => { rejectCancellation = reject; });
+    const cancel = (message) => {
+      abandoned = true;
+      rejectCancellation(new Error(message || 'The photo was cancelled.'));
+    };
+    cancelDecode = cancel;
+    const timer = setTimeout(() => cancel('This photo could not be opened in time. Choose a photo saved on this device and try again.'), 30000);
     try {
-      if (typeof createImageBitmap === 'function') {
-        try { image = await createImageBitmap(file, { imageOrientation: 'from-image' }); }
-        catch (_) { /* The Image fallback also honours EXIF orientation in modern browsers. */ }
-      }
-      if (!image) {
-        objectUrl = URL.createObjectURL(file);
-        image = await new Promise((resolve, reject) => {
-          const element = new Image();
-          element.onload = () => resolve(element);
-          element.onerror = () => reject(new Error('This image could not be opened. Please choose an undamaged JPG, PNG or WebP.'));
-          element.src = objectUrl;
-        });
-      }
-      const width = image.naturalWidth || image.width;
-      const height = image.naturalHeight || image.height;
-      if (!width || !height) throw new Error('This image has no readable dimensions. Please choose another photograph.');
-      if (width * height > MAX_PIXELS) throw new Error('This photo is above the 40-megapixel limit. Export a smaller image and upload it again.');
-      if (Math.min(width, height) < 100) throw new Error('This image is too small. Upload the original photograph rather than a thumbnail.');
-      const scale = Math.min(1, MAX_SIDE / Math.max(width, height));
-      const decodedCanvas = document.createElement('canvas');
-      decodedCanvas.width = Math.round(width * scale);
-      decodedCanvas.height = Math.round(height * scale);
-      const decodedContext = decodedCanvas.getContext('2d');
-      decodedContext.fillStyle = '#ffffff';
-      decodedContext.fillRect(0, 0, decodedCanvas.width, decodedCanvas.height);
-      decodedContext.drawImage(image, 0, 0, decodedCanvas.width, decodedCanvas.height);
-      return { canvas: decodedCanvas, dimensions: { originalWidth: width, originalHeight: height, analysisWidth: decodedCanvas.width, analysisHeight: decodedCanvas.height } };
+      return await Promise.race([cancellation, (async () => {
+        // Gallery and cloud providers sometimes report JPEGs with an empty or generic MIME.
+        // Check the actual bytes; a renamed SVG or HEIC must not enter the image decoder.
+        const header = new Uint8Array(await file.slice(0, 12).arrayBuffer());
+        let mime = '';
+        if (header[0] === 255 && header[1] === 216 && header[2] === 255) mime = 'image/jpeg';
+        else if ([137,80,78,71,13,10,26,10].every((v, i) => header[i] === v)) mime = 'image/png';
+        else if ([82,73,70,70].every((v, i) => header[i] === v) && [87,69,66,80].every((v, i) => header[i + 8] === v)) mime = 'image/webp';
+        if (!mime) throw new Error('Choose a JPG, PNG or WebP photo. HEIC and other formats need to be exported as JPG first.');
+        if (abandoned) throw new Error('The photo was cancelled.');
+        const imageBlob = file.slice(0, file.size, mime);
+        if (typeof createImageBitmap === 'function') {
+          try {
+            const bitmap = await createImageBitmap(imageBlob, { imageOrientation: 'from-image' });
+            if (abandoned) { bitmap.close(); throw new Error('The photo was cancelled.'); }
+            image = bitmap;
+          }
+          catch (_) { /* The Image fallback also honours EXIF orientation in modern browsers. */ }
+        }
+        if (abandoned) throw new Error('The photo was cancelled.');
+        if (!image) {
+          objectUrl = URL.createObjectURL(imageBlob);
+          image = await new Promise((resolve, reject) => {
+            element = new Image();
+            element.onload = () => resolve(element);
+            element.onerror = () => reject(new Error('This image could not be opened. Please choose an undamaged JPG, PNG or WebP.'));
+            element.src = objectUrl;
+          });
+        }
+        const width = image.naturalWidth || image.width;
+        const height = image.naturalHeight || image.height;
+        if (!width || !height) throw new Error('This image has no readable dimensions. Please choose another photograph.');
+        if (width * height > MAX_PIXELS) throw new Error('This photo is above the 40-megapixel limit. Export a smaller image and upload it again.');
+        if (Math.min(width, height) < 100) throw new Error('This image is too small. Upload the original photograph rather than a thumbnail.');
+        const scale = Math.min(1, MAX_SIDE / Math.max(width, height));
+        const decodedCanvas = document.createElement('canvas');
+        decodedCanvas.width = Math.round(width * scale);
+        decodedCanvas.height = Math.round(height * scale);
+        const decodedContext = decodedCanvas.getContext('2d');
+        decodedContext.fillStyle = '#ffffff';
+        decodedContext.fillRect(0, 0, decodedCanvas.width, decodedCanvas.height);
+        decodedContext.drawImage(image, 0, 0, decodedCanvas.width, decodedCanvas.height);
+        return { canvas: decodedCanvas, dimensions: { originalWidth: width, originalHeight: height, analysisWidth: decodedCanvas.width, analysisHeight: decodedCanvas.height } };
+      })()]);
     } finally {
+      abandoned = true;
+      clearTimeout(timer);
+      if (cancelDecode === cancel) cancelDecode = null;
       if (image && typeof image.close === 'function') image.close();
+      if (element) { element.onload = null; element.onerror = null; element.src = ''; }
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     }
   }
@@ -154,10 +193,13 @@
     $('upload-error').textContent = message;
     $('upload-error').hidden = false;
     announce(message);
+    focusSection('upload-section');
   }
 
   async function startFile(file, sample) {
     const requestId = ++operation;
+    sampleOperation += 1;
+    if (cancelDecode) cancelDecode();
     if (pending) resetWorker('A new image was selected.');
     lastReport = null;
     $('upload-error').hidden = true;
@@ -167,14 +209,27 @@
     showSection('processing');
     $('processing-title').textContent = 'Reading your photograph…';
     $('processing-detail').textContent = 'Opening the photo. Everything happens on your device.';
+    $('processing-name').textContent = sample ? sample.label : (file.name || 'Your photograph');
+    $('processing-preview').hidden = true;
+    $('processing-elapsed').textContent = '0.0 s elapsed';
+    if (progressTimer) clearInterval(progressTimer);
+    progressTimer = setInterval(() => {
+      if (requestId === operation) $('processing-elapsed').textContent = `${((performance.now() - started) / 1000).toFixed(1)} s elapsed`;
+    }, 250);
     announce('Opening and measuring your photograph locally.');
-    $('measure').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    focusSection('processing-section');
     try {
       const decoded = await decodeFile(file);
       if (requestId !== operation) return;
       sourceCanvas.width = decoded.canvas.width;
       sourceCanvas.height = decoded.canvas.height;
       sourceContext.drawImage(decoded.canvas, 0, 0);
+      const preview = $('processing-preview');
+      const previewScale = Math.min(1, 160 / Math.max(decoded.canvas.width, decoded.canvas.height));
+      preview.width = Math.round(decoded.canvas.width * previewScale);
+      preview.height = Math.round(decoded.canvas.height * previewScale);
+      preview.getContext('2d').drawImage(decoded.canvas, 0, 0, preview.width, preview.height);
+      preview.hidden = false;
       currentImage = { name: sample ? sample.label : (file.name || 'Your photograph'), sample: !!sample, bytes: file.size, mimeType: file.type, ...decoded.dimensions };
       $('processing-detail').textContent = 'Preparing the local engine. The first image may take a little longer.';
       const pixels = sourceContext.getImageData(0, 0, sourceCanvas.width, sourceCanvas.height);
@@ -256,6 +311,31 @@
       context.fillStyle = '#436b49';
       context.fillText(label, x, y - 10 * factor);
     }
+    annotatedCanvas.width = photoCanvas.width;
+    annotatedCanvas.height = photoCanvas.height;
+    annotatedCanvas.getContext('2d').drawImage(photoCanvas, 0, 0);
+  }
+
+  function renderPhotoView(result) {
+    const points = result.ring && result.ring.points ? result.ring.points.map(point).filter(p => Number.isFinite(p.x) && Number.isFinite(p.y)) : [];
+    const zoomed = photoView === 'ring' && points.length > 1;
+    let x = 0, y = 0, width = annotatedCanvas.width, height = annotatedCanvas.height;
+    if (zoomed) {
+      const xs = points.map(p => p.x), ys = points.map(p => p.y);
+      const left = Math.min(...xs), top = Math.min(...ys), right = Math.max(...xs), bottom = Math.max(...ys);
+      const side = Math.min(Math.max(right - left, bottom - top) * 1.5, width, height);
+      x = Math.max(0, Math.min(width - side, (left + right - side) / 2));
+      y = Math.max(0, Math.min(height - side, (top + bottom - side) / 2));
+      width = side; height = side;
+    }
+    photoCanvas.width = Math.round(width);
+    photoCanvas.height = Math.round(height);
+    photoCanvas.getContext('2d').drawImage(annotatedCanvas, x, y, width, height, 0, 0, photoCanvas.width, photoCanvas.height);
+    $('photo-view-toggle').textContent = zoomed ? 'Show whole photo' : 'Enlarge ring';
+    $('photo-view-toggle').setAttribute('aria-pressed', String(zoomed));
+    $('marker-legend').hidden = zoomed || !(result.marker && result.marker.corners && result.marker.corners.length > 1);
+    $('scale-label').textContent = zoomed ? 'Ring detail · scale from full photo' : result.marker && Number.isFinite(result.marker.pixelsPerMm) ? `${result.marker.pixelsPerMm.toFixed(1)} px / mm` : 'Scale not established';
+    photoCanvas.setAttribute('aria-label', zoomed ? 'Enlarged ring with the detected inner boundary' : 'Your uploaded photograph with any detected marker and inner boundary');
   }
 
   function formatTime(milliseconds) {
@@ -290,7 +370,7 @@
     $('measurement-card').hidden = !okay;
     $('retake-panel').hidden = okay;
     $('result-eyebrow').textContent = okay ? 'YOUR MEASUREMENT' : 'PHOTO CHECK';
-    $('result-title').textContent = okay ? 'A closer look at your fit.' : 'A little more clarity, please.';
+    $('result-title').textContent = okay ? 'Ring estimate' : 'Photo not measured';
     $('photo-name').textContent = currentImage.name;
     $('sample-badge').hidden = !currentImage.sample;
     $('processing-time').textContent = formatTime(elapsed);
@@ -301,6 +381,9 @@
     $('scale-label').textContent = result.marker && Number.isFinite(result.marker.pixelsPerMm) ? `${result.marker.pixelsPerMm.toFixed(1)} px / mm` : 'Scale not established';
     photoCanvas.setAttribute('aria-label', `Your uploaded photograph${hasMarker ? ', with the detected calibration marker' : ''}${hasRing ? ', with the detected inner boundary' : ''}`);
     drawAnnotations(result);
+    photoView = 'whole';
+    $('photo-view-toggle').hidden = !okay || !hasRing;
+    renderPhotoView(result);
     renderChecks(result.checks);
     selectedSize = null;
     if (okay) {
@@ -313,9 +396,20 @@
         : 'The diameter is outside the published 14.1–22.2 mm chart. No size is extrapolated.';
       announce(`Estimated inside diameter ${result.diameterMm.toFixed(1)} millimetres, provisional uncertainty plus or minus ${result.uncertaintyMm.toFixed(1)} millimetres.${selectedSize ? ` Closest US size ${selectedSize.size}.` : ' The diameter is outside the size chart.'}`);
     } else {
-      $('retake-title').textContent = 'This photo needs another try.';
+      const titles = {
+        missing_marker: '20 mm marker not found',
+        multiple_markers: 'More than one marker',
+        multiple_rings: 'More than one ring',
+        ring_not_found: 'Inner edge is not clear',
+        blur: 'Photo is too blurred',
+        perspective: 'Camera angle is too steep',
+        non_circular: 'Opening cannot be measured reliably'
+      };
+      $('retake-title').textContent = titles[result.code] || 'No reliable measurement';
       $('retake-reason').textContent = result.message || 'This photo does not support a reliable measurement.';
       $('retake-guidance').textContent = result.guidance || 'Use a sharp, near-overhead photograph of one ring beside the supplied printed marker.';
+      if (result.code === 'missing_marker') $('retake-guidance').textContent = 'Choose a photo with the ring lying flat beside the printed 20 mm marker. A ring on a finger or in a hand cannot be measured from this photo.';
+      if (result.code === 'ring_not_found') $('retake-guidance').textContent = 'The marker was found, but the inner metal edge could not be separated reliably from shadows or reflections. This ring or photo may be unsupported. No diameter has been guessed.';
       announce(`${$('retake-reason').textContent} ${$('retake-guidance').textContent}`);
     }
     lastReport = {
@@ -340,6 +434,7 @@
       validationStatus: 'Physical accuracy and uncertainty remain unvalidated. Results assume a physically verified 20 mm marker and require comparison with independent measurements.'
     };
     populateSizing();
+    focusSection('result-section');
   }
 
   function populateSizing() {
@@ -366,6 +461,7 @@
 
   async function loadSample(filename) {
     if (running) return;
+    const sampleId = ++sampleOperation;
     $('upload-error').hidden = true;
     const button = document.querySelector(`[data-sample="${filename}"]`);
     if (button) button.disabled = true;
@@ -374,7 +470,7 @@
       const response = await fetch(`samples/${encodeURIComponent(filename)}`, { cache: 'force-cache' });
       if (!response.ok) throw new Error('The example image is not available. Upload your own photo or try again later.');
       const blob = await response.blob();
-      if (requestId !== operation || running) return;
+      if (requestId !== operation || sampleId !== sampleOperation || running) return;
       const file = new File([blob], filename, { type: 'image/png' });
       const labels = {
         'cutout-17.png': '17 mm synthetic cut-out',
@@ -383,21 +479,32 @@
       };
       await startFile(file, { label: labels[filename] || 'Synthetic example' });
     } catch (error) {
+      if (requestId !== operation || sampleId !== sampleOperation || running) return;
       showSection('upload');
       uploadError(error.message || 'The example could not be opened. Please upload a photograph.');
-    } finally { if (button) button.disabled = false; }
+    } finally { if (button && !running) button.disabled = false; }
   }
 
   function returnToUpload() {
     operation += 1;
+    if (cancelDecode) cancelDecode();
     if (pending) resetWorker('The measurement was cancelled.');
     currentImage = null;
     lastReport = null;
     fileInput.value = '';
     $('upload-error').hidden = true;
     showSection('upload');
-    $('choose-photo').focus({ preventScroll: true });
+    focusSection('upload-section');
     announce('Ready for another photograph.');
+  }
+
+  function choosePhoto(event) {
+    if (event) event.stopPropagation();
+    if (running) return;
+    // Keep the current result if the user dismisses the picker. All entry points
+    // open it synchronously inside the tap, as required by mobile browsers.
+    fileInput.value = '';
+    fileInput.click();
   }
 
   function openDialog(id) {
@@ -411,11 +518,12 @@
     fileInput.value = '';
     if (file) startFile(file);
   });
-  $('choose-photo').addEventListener('click', (event) => { event.stopPropagation(); fileInput.click(); });
-  dropzone.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('click', (event) => event.stopPropagation());
+  $('choose-photo').addEventListener('click', choosePhoto);
+  dropzone.addEventListener('click', choosePhoto);
   dropzone.addEventListener('keydown', (event) => {
     if (event.target !== dropzone) return;
-    if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); fileInput.click(); }
+    if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); choosePhoto(event); }
   });
   ['dragenter', 'dragover'].forEach((type) => dropzone.addEventListener(type, (event) => {
     event.preventDefault();
@@ -449,8 +557,14 @@
     const rect = dialog.getBoundingClientRect();
     if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
   }));
-  $('replace-photo').addEventListener('click', returnToUpload);
-  $('retake-upload').addEventListener('click', () => { returnToUpload(); fileInput.click(); });
+  $('replace-photo').addEventListener('click', choosePhoto);
+  $('retake-upload').addEventListener('click', choosePhoto);
+  $('photo-view-toggle').addEventListener('click', () => {
+    if (!lastReport) return;
+    photoView = photoView === 'whole' ? 'ring' : 'whole';
+    renderPhotoView(lastReport.measurement);
+    photoCanvas.scrollIntoView({ behavior: 'instant', block: 'center' });
+  });
   $('cancel-processing').addEventListener('click', returnToUpload);
   $('download-result').addEventListener('click', () => {
     if (!lastReport) return;

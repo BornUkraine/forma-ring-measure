@@ -32,7 +32,7 @@
       <section class="hero" aria-labelledby="page-title">
         <div class="hero-copy">
           <p class="eyebrow"><span></span> A small reference. A useful estimate.</p>
-          <h1 id="page-title">A clearer picture<br>of your <em>ring size.</em></h1>
+          <h1 id="page-title"><span class="desktop-title">A clearer picture<br>of your <em>ring size.</em></span><span class="mobile-title">Measure your <em>ring.</em></span></h1>
           <p class="hero-description">One ring, one printed marker, one photograph.<br class="desktop-break"> Find your ring’s inside diameter, without the guesswork.</p>
           <div class="privacy-note"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2 4 4v5c0 4 6 8 6 8s6-4 6-8V4z"/><path d="m7 9 2 2 4-4"/></svg>Your photo stays on your device.</div>
         </div>
@@ -71,15 +71,16 @@
           <li class="step" id="result-step"><span class="step-number">03</span><span>See your estimate</span></li>
         </ol>
 
-        <div class="workspace" id="upload-section">
+        <div class="workspace" id="upload-section" tabindex="-1">
           <section class="upload-card" aria-labelledby="upload-title">
-            <div class="card-heading"><div><p class="eyebrow small">LET’S FIND YOUR FIT</p><h2 id="upload-title">Start with your photograph.</h2></div><span class="private-pill"><span></span>On-device</span></div>
+            <div class="card-heading"><div><p class="eyebrow small">LET’S FIND YOUR FIT</p><h2 id="upload-title">Upload your photo.</h2></div><span class="private-pill"><span></span>On-device</span></div>
+            <p class="upload-requirements" id="upload-requirements">Lay one ring flat beside the printed <strong>20 mm marker</strong>. Show both completely, with the ring off your finger.</p>
             <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" hidden>
             <div class="dropzone" id="dropzone">
               <div class="upload-symbol"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="7" y="8" width="26" height="24" rx="4"/><circle cx="15" cy="16" r="2.5"/><path d="m8 27 8-7 6 5 5-4 6 6M29 5v9m-4-4 4 4 4-4"/></svg></div>
               <p class="drop-title">Drop your photo here</p>
               <p class="drop-description">or choose one from your files</p>
-              <button class="primary-button" type="button" id="choose-photo" aria-describedby="file-hint"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 13V3m-4 4 4-4 4 4M4 12v5h12v-5"/></svg>Upload photo</button>
+              <button class="primary-button" type="button" id="choose-photo" aria-describedby="upload-requirements file-hint"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 13V3m-4 4 4-4 4 4M4 12v5h12v-5"/></svg>Upload photo</button>
               <p class="file-hint" id="file-hint">JPG, PNG or WebP · Up to 20 MB</p>
             </div>
             <div class="upload-error" id="upload-error" role="alert" hidden></div>
@@ -88,7 +89,7 @@
 
           <aside class="prep-card" aria-labelledby="prep-title">
             <div class="prep-card-top"><span class="eyebrow small">BEFORE YOU UPLOAD</span><span class="tiny-square" aria-hidden="true"></span></div>
-            <h2 id="prep-title">A small square.<br>A sense of scale.</h2>
+            <h2 id="prep-title">A small square.<br> A sense of scale.</h2>
             <p>Your photo needs our printed marker next to the ring. It tells us how pixels translate into millimetres.</p>
             <a class="marker-download" href="marker.svg" download="forma-20mm-marker.svg"><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v9m-3-3 3 3 3-3M4 13v4h12v-4"/></svg>Download 20 mm marker</span><span aria-hidden="true">↗</span></a>
             <ul class="prep-tips"><li>Print at 100% / actual size</li><li>Lay the ring and marker flat</li><li>Photograph from directly above</li></ul>
@@ -96,25 +97,26 @@
           </aside>
         </div>
 
-        <section class="processing-card" id="processing-section" aria-live="polite" hidden>
-          <span class="processing-spinner" aria-hidden="true"></span><div><p class="eyebrow small">A LITTLE SCIENCE, IN YOUR BROWSER</p><h2 id="processing-title">Reading your photograph…</h2><p id="processing-detail">Preparing the image and checking its scale.</p></div>
+        <section class="processing-card" id="processing-section" aria-live="polite" tabindex="-1" hidden>
+          <canvas id="processing-preview" width="96" height="96" aria-label="Selected photograph" hidden></canvas>
+          <span class="processing-spinner" aria-hidden="true"></span><div class="processing-copy"><p class="eyebrow small">PROCESSING ON YOUR DEVICE</p><h2 id="processing-title">Reading your photograph…</h2><p id="processing-name"></p><p id="processing-detail">Preparing the image and checking its scale.</p><p id="processing-elapsed" aria-live="off">0.0 s elapsed</p></div>
           <button class="text-button" type="button" id="cancel-processing">Cancel</button>
         </section>
 
-        <section class="result-section" id="result-section" aria-labelledby="result-title" hidden>
+        <section class="result-section" id="result-section" aria-labelledby="result-title" tabindex="-1" hidden>
           <div class="result-topline"><div><p class="eyebrow small" id="result-eyebrow">YOUR MEASUREMENT</p><h2 id="result-title">A closer look at your fit.</h2></div><button class="secondary-button" type="button" id="replace-photo"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 9a7 7 0 0 1 12-4l2 2M17 3v4h-4M17 11a7 7 0 0 1-12 4l-2-2m0 4v-4h4"/></svg>New photo</button></div>
+          <div class="checks-and-metrics"><div class="metrics"><span><strong id="processing-time">—</strong> to result</span><span><strong>$0</strong> paid API usage</span><button class="text-button" type="button" id="download-result">Save report <span aria-hidden="true">↓</span></button></div><details class="quality-details"><summary>Quality checks</summary><div class="checks" id="checks-list" aria-label="Image quality checks"></div></details></div>
           <div class="result-grid">
-            <div class="photo-card"><div class="photo-caption"><span id="photo-name">Your photograph</span><span id="sample-badge" hidden>Synthetic example</span></div><div class="canvas-wrap"><canvas id="photo-canvas" aria-label="Your uploaded photograph"></canvas></div><div class="photo-legend"><span id="marker-legend" hidden><i class="legend-dot marker-dot"></i>20 mm marker</span><span id="ring-legend" hidden><i class="legend-dot ring-dot"></i>Inner boundary</span><span class="scale-label" id="scale-label"></span></div></div>
             <div class="measurement-card" id="measurement-card">
               <span class="result-status" id="result-status"><span></span>Measurement estimated</span>
               <p class="value-label">Inside diameter</p><div class="diameter-line"><span id="diameter-value">—</span><span class="unit">mm</span></div><p class="uncertainty" id="uncertainty-value"></p>
               <div class="size-row"><div><span class="value-label">Closest US ring size</span><p class="size-number" id="size-value">—</p></div><button class="text-button" id="sizing-trigger" type="button">Size chart <span aria-hidden="true">↗</span></button></div>
               <p class="size-note" id="size-note">Rounded to the nearest entry in the size chart.</p>
-              <div class="result-caveat"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M10 9v5m0-8v1"/></svg><p>Assumes the printed black square really measures 20 × 20 mm. Check the highlighted inner edge. Physical accuracy and the uncertainty estimate remain unvalidated.</p></div>
+              <div class="result-caveat"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M10 9v5m0-8v1"/></svg><p>Estimate only. Assumes a verified 20 × 20 mm marker. Physical accuracy and uncertainty are not yet validated.</p></div>
             </div>
             <div class="retake-panel" id="retake-panel" hidden><span class="retake-icon" aria-hidden="true">↻</span><p class="eyebrow small">LET’S GET A CLEARER PICTURE</p><h3 id="retake-title">This photo needs another try.</h3><p id="retake-reason"></p><p class="retake-guidance" id="retake-guidance"></p><button class="primary-button" type="button" id="retake-upload">Choose another photo <span aria-hidden="true">→</span></button></div>
+            <div class="photo-card"><div class="photo-caption"><span id="photo-name">Your photograph</span><span id="sample-badge" hidden>Synthetic example</span></div><div class="canvas-wrap"><canvas id="photo-canvas" aria-label="Your uploaded photograph"></canvas></div><div class="photo-legend"><span id="marker-legend" hidden><i class="legend-dot marker-dot"></i>20 mm marker</span><span id="ring-legend" hidden><i class="legend-dot ring-dot"></i>Inner boundary</span><span class="scale-label" id="scale-label"></span><button class="secondary-button" id="photo-view-toggle" type="button" aria-controls="photo-canvas" aria-pressed="false" hidden>Enlarge ring</button></div></div>
           </div>
-          <div class="checks-and-metrics"><div class="checks" id="checks-list" aria-label="Image quality checks"></div><div class="metrics"><span><strong id="processing-time">—</strong> to result</span><span><strong>$0</strong> paid API usage</span><button class="text-button" type="button" id="download-result">Save report <span aria-hidden="true">↓</span></button></div></div>
           <p class="metrics-footnote" id="metrics-footnote">Time includes image decoding, engine preparation and measurement on this device. Hosting, bandwidth and your device’s resources are separate.</p>
         </section>
       </section>
