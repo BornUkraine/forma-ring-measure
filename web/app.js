@@ -26,6 +26,15 @@
 
   function announce(message) { $('status-announcement').textContent = message; }
 
+  function updateWorkflow() {
+    $('step-marker').disabled = running;
+    $('step-upload').disabled = running;
+    $('step-result').disabled = running || !lastReport;
+    const resultVisible = document.body.dataset.view === 'result';
+    $('step-upload').setAttribute('aria-current', resultVisible ? 'false' : 'step');
+    $('step-result').setAttribute('aria-current', resultVisible ? 'step' : 'false');
+  }
+
   function showSection(name) {
     document.body.dataset.view = name;
     $('upload-section').hidden = name !== 'upload';
@@ -35,6 +44,7 @@
     $('result-step').classList.toggle('active', name === 'result');
     document.querySelectorAll('.sample-button').forEach((button) => { button.disabled = name === 'processing'; });
     running = name === 'processing';
+    updateWorkflow();
     if (!running && progressTimer) { clearInterval(progressTimer); progressTimer = null; }
   }
 
@@ -447,6 +457,7 @@
       variableCost: { paidApiCalls: 0, paidApiCostUsd: 0, hostingAndBandwidth: 'Separate; provider-dependent', deviceResources: 'Not metered by this application' },
       validationStatus: 'Physical accuracy and uncertainty remain unvalidated. Results assume a physically verified 20 mm marker and require comparison with independent measurements.'
     };
+    updateWorkflow();
     populateSizing();
     focusSection('result-section');
   }
@@ -533,6 +544,13 @@
     if (file) startFile(file);
   });
   fileInput.addEventListener('click', (event) => event.stopPropagation());
+  $('step-marker').addEventListener('click', () => { if (!running) openDialog('guide-dialog'); });
+  $('step-upload').addEventListener('click', choosePhoto);
+  $('step-result').addEventListener('click', () => {
+    if (running || !lastReport) return;
+    showSection('result');
+    focusSection('result-section');
+  });
   $('choose-photo').addEventListener('click', choosePhoto);
   dropzone.addEventListener('click', choosePhoto);
   dropzone.addEventListener('keydown', (event) => {

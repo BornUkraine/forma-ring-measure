@@ -66,9 +66,9 @@
 
       <section class="measure-area" id="measure" aria-label="Measure your ring">
         <ol class="workflow" aria-label="Measurement steps">
-          <li class="step"><span class="step-number">01</span><span>Print your marker</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h12m-4-4 4 4-4 4"/></svg></li>
-          <li class="step active" id="upload-step"><span class="step-number">02</span><span>Upload a photo</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h12m-4-4 4 4-4 4"/></svg></li>
-          <li class="step" id="result-step"><span class="step-number">03</span><span>See your estimate</span></li>
+          <li class="step" id="marker-step"><button class="step-button" type="button" id="step-marker" aria-controls="guide-dialog" aria-haspopup="dialog"><span class="step-number">01</span><span>Print your marker</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h12m-4-4 4 4-4 4"/></svg></button></li>
+          <li class="step active" id="upload-step"><button class="step-button" type="button" id="step-upload" aria-controls="file-input" aria-current="step"><span class="step-number">02</span><span>Upload a photo</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h12m-4-4 4 4-4 4"/></svg></button></li>
+          <li class="step" id="result-step"><button class="step-button" type="button" id="step-result" aria-controls="result-section" disabled><span class="step-number">03</span><span>See your estimate</span></button></li>
         </ol>
 
         <div class="workspace" id="upload-section" tabindex="-1">

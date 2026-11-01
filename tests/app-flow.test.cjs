@@ -161,7 +161,26 @@ test('upload button opens one native picker; direct input click does not recurse
   assert.equal(app.calls.picker, 2, 'Each activation must issue exactly one input click');
 });
 
-for (const [button, result] of [['replace-photo', accepted()], ['retake-upload', refused()]]) {
+test('marker step opens the capture guide and keeps an existing result', async () => {
+  const app = application(); await app.choose(jpeg()); await app.finish();
+  assert.equal(app.get('step-marker').tagName, 'BUTTON', 'Step must be a native keyboard and touch control');
+  app.get('step-marker').querySelector('.step-number').click();
+  assert.equal(app.get('guide-dialog').hasAttribute('open'), true);
+  assert.equal(app.calls.picker, 0, 'Marker help must not open the photo picker');
+  assert.equal(app.get('result-section').hidden, false);
+  assert.equal(app.get('diameter-value').textContent, '18.0');
+  assert.ok(app.get('guide-dialog').querySelector('a'), 'The guide must retain its marker download');
+});
+
+test('upload step opens one picker when its numbered target is tapped', () => {
+  const app = application();
+  assert.equal(app.get('step-upload').tagName, 'BUTTON');
+  app.get('step-upload').querySelector('.step-number').click();
+  assert.equal(app.calls.picker, 1, 'A tap anywhere inside the step must open exactly one picker');
+  assert.equal(app.get('upload-section').hidden, false);
+});
+
+for (const [button, result] of [['replace-photo', accepted()], ['retake-upload', refused()], ['step-upload', accepted()], ['step-upload', refused()]]) {
   test(`${button} opens one picker and cancellation preserves the current result`, async () => {
     const app = application(); await app.choose(jpeg()); await app.finish(result);
     const oldName = app.get('photo-name').textContent;
@@ -174,6 +193,43 @@ for (const [button, result] of [['replace-photo', accepted()], ['retake-upload',
     assert.equal(app.get('upload-section').hidden, true);
   });
 }
+
+for (const result of [accepted(), refused()]) {
+  test(`result step is unavailable before analysis and focuses a completed ${result.status} outcome`, async () => {
+    const app = application();
+    assert.equal(app.get('step-result').disabled, true);
+    app.get('step-result').click();
+    assert.equal(app.calls.scroll.length, 0, 'An unavailable estimate must not navigate to an empty result');
+    assert.equal(app.get('step-upload').getAttribute('aria-current'), 'step');
+    await app.choose(jpeg()); await app.finish(result);
+    assert.equal(app.get('step-result').disabled, false);
+    assert.equal(app.get('step-result').getAttribute('aria-current'), 'step');
+    assert.equal(app.get('step-upload').getAttribute('aria-current'), 'false');
+    app.calls.scroll.length = 0; app.calls.focus.length = 0;
+    app.get('step-result').click();
+    assert.equal(app.calls.scroll.at(-1).id, 'result-section');
+    assert.equal(app.calls.focus.at(-1).id, 'result-section');
+    assert.equal(app.get('result-section').hidden, false);
+  });
+}
+
+test('steps block competing actions during processing and recover after cancellation', async () => {
+  const app = application({ hangDecode: true }); await app.choose(jpeg());
+  for (const id of ['step-marker', 'step-upload', 'step-result']) {
+    assert.equal(app.get(id).disabled, true);
+    app.get(id).click();
+    app.get(id).dispatchEvent({ type: 'click', bubbles: true });
+  }
+  assert.equal(app.calls.picker, 0);
+  assert.equal(app.get('guide-dialog').hasAttribute('open'), false);
+  assert.equal(app.get('processing-section').hidden, false);
+  app.get('cancel-processing').click(); await app.flush();
+  assert.equal(app.get('step-marker').disabled, false);
+  assert.equal(app.get('step-upload').disabled, false);
+  assert.equal(app.get('step-result').disabled, true);
+  app.get('step-upload').click();
+  assert.equal(app.calls.picker, 1);
+});
 
 test('late failure of a sample fetch cannot replace a newly selected photo', async () => {
   let failSample;
