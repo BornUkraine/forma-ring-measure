@@ -1,9 +1,9 @@
 {
-  "runAt": "2026-10-31T18:14:18.668Z",
+  "runAt": "2026-11-01T10:58:55.239Z",
   "runtime": "v24.5.0",
   "engine": "OpenCV4.10.0 / Forma",
   "inputType": "synthetic-analytic-fixtures",
-  "physicalValidation": "PENDING — no independently measured real objects have been supplied.",
+  "physicalValidation": "Physical accuracy remains unvalidated. Existing approximate real-object comparisons are recorded separately in JEWELLERY-VALIDATION.md.",
   "timingScope": "Node image decode + same pixel measurement engine. Excludes cold OpenCV download/initialization; browser displays end-to-end user-operation latency separately.",
   "costAssumptions": "No network inference/recognition/reasoning/speech/retry or intermediary API calls. Paid API variable charges: USD0/image. Device compute/energy not priced. Hosting and bandwidth separate; no free credits assumed.",
   "passed": 14,
@@ -20,9 +20,9 @@
       "expectedToleranceMm": 0.35,
       "rejectionCode": null,
       "passed": true,
-      "decodeMs": 51.4,
-      "processingMs": 102.4,
-      "totalMs": 153.8,
+      "decodeMs": 40.9,
+      "processingMs": 461.8,
+      "totalMs": 502.8,
       "paidApiCostUsd": 0
     },
     {
@@ -36,9 +36,9 @@
       "expectedToleranceMm": 0.35,
       "rejectionCode": null,
       "passed": true,
-      "decodeMs": 40.7,
-      "processingMs": 39.6,
-      "totalMs": 80.3,
+      "decodeMs": 40,
+      "processingMs": 453.9,
+      "totalMs": 493.9,
       "paidApiCostUsd": 0
     },
     {
@@ -52,9 +52,9 @@
       "expectedToleranceMm": 0.4,
       "rejectionCode": null,
       "passed": true,
-      "decodeMs": 45.3,
-      "processingMs": 162.7,
-      "totalMs": 207.9,
+      "decodeMs": 32,
+      "processingMs": 489.3,
+      "totalMs": 521.3,
       "paidApiCostUsd": 0
     },
     {
@@ -68,9 +68,9 @@
       "expectedToleranceMm": null,
       "rejectionCode": "missing_marker",
       "passed": true,
-      "decodeMs": 49.8,
-      "processingMs": 22.5,
-      "totalMs": 72.3,
+      "decodeMs": 34.8,
+      "processingMs": 24.2,
+      "totalMs": 59,
       "paidApiCostUsd": 0
     },
     {
@@ -84,9 +84,9 @@
       "expectedToleranceMm": null,
       "rejectionCode": "missing_marker",
       "passed": true,
-      "decodeMs": 34.8,
-      "processingMs": 22.9,
-      "totalMs": 57.7,
+      "decodeMs": 33.5,
+      "processingMs": 24,
+      "totalMs": 57.6,
       "paidApiCostUsd": 0
     },
     {
@@ -100,9 +100,9 @@
       "expectedToleranceMm": null,
       "rejectionCode": "blur",
       "passed": true,
-      "decodeMs": 21.3,
-      "processingMs": 37.6,
-      "totalMs": 58.9,
+      "decodeMs": 21.1,
+      "processingMs": 411.5,
+      "totalMs": 432.7,
       "paidApiCostUsd": 0
     },
     {
@@ -116,9 +116,9 @@
       "expectedToleranceMm": null,
       "rejectionCode": "perspective",
       "passed": true,
-      "decodeMs": 32.5,
-      "processingMs": 25.7,
-      "totalMs": 58.1,
+      "decodeMs": 31,
+      "processingMs": 23.7,
+      "totalMs": 54.8,
       "paidApiCostUsd": 0
     },
     {
@@ -132,9 +132,9 @@
       "expectedToleranceMm": null,
       "rejectionCode": "multiple_rings",
       "passed": true,
-      "decodeMs": 44.5,
-      "processingMs": 36.3,
-      "totalMs": 80.8,
+      "decodeMs": 36.5,
+      "processingMs": 418.7,
+      "totalMs": 455.2,
       "paidApiCostUsd": 0
     },
     {
@@ -148,9 +148,9 @@
       "expectedToleranceMm": null,
       "rejectionCode": "ring_not_found",
       "passed": true,
-      "decodeMs": 27.8,
-      "processingMs": 27.5,
-      "totalMs": 55.3,
+      "decodeMs": 29.3,
+      "processingMs": 463.5,
+      "totalMs": 492.8,
       "paidApiCostUsd": 0
     },
     {
@@ -164,9 +164,9 @@
       "expectedToleranceMm": 0.4,
       "rejectionCode": null,
       "passed": true,
-      "decodeMs": 29.9,
-      "processingMs": 27.6,
-      "totalMs": 57.4,
+      "decodeMs": 39,
+      "processingMs": 408.7,
+      "totalMs": 447.7,
       "paidApiCostUsd": 0
     },
     {
@@ -175,14 +175,14 @@
       "expectedStatus": "ok",
       "actualStatus": "ok",
       "expectedDiameterMm": 17,
-      "actualDiameterMm": 16.967192304201337,
-      "absoluteErrorMm": 0.03280769579866316,
+      "actualDiameterMm": 16.87121992549166,
+      "absoluteErrorMm": 0.1287800745083416,
       "expectedToleranceMm": 0.4,
       "rejectionCode": null,
       "passed": true,
-      "decodeMs": 42.2,
-      "processingMs": 56,
-      "totalMs": 98.2,
+      "decodeMs": 48.4,
+      "processingMs": 861.7,
+      "totalMs": 910.1,
       "paidApiCostUsd": 0
     },
     {
@@ -196,9 +196,9 @@
       "expectedToleranceMm": null,
       "rejectionCode": "low_resolution",
       "passed": true,
-      "decodeMs": 3.8,
-      "processingMs": 2.3,
-      "totalMs": 6.1,
+      "decodeMs": 4.8,
+      "processingMs": 3.1,
+      "totalMs": 7.9,
       "paidApiCostUsd": 0
     },
     {
@@ -212,9 +212,9 @@
       "expectedToleranceMm": null,
       "rejectionCode": "multiple_markers",
       "passed": true,
-      "decodeMs": 34.3,
-      "processingMs": 24.4,
-      "totalMs": 58.7,
+      "decodeMs": 33.8,
+      "processingMs": 27.4,
+      "totalMs": 61.2,
       "paidApiCostUsd": 0
     },
     {
@@ -228,9 +228,9 @@
       "expectedToleranceMm": 0.45,
       "rejectionCode": null,
       "passed": true,
-      "decodeMs": 33,
-      "processingMs": 29.7,
-      "totalMs": 62.8,
+      "decodeMs": 44.8,
+      "processingMs": 550,
+      "totalMs": 594.7,
       "paidApiCostUsd": 0
     }
   ]

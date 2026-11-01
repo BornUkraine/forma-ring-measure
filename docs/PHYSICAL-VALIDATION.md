@@ -1,71 +1,53 @@
-# Physical validation — protocol and pending results
+# Physical validation — existing evidence and accuracy limits
 
-**Status: pending. No physical measurement accuracy has been established.** The generated scenes in `web/samples/` are labelled synthetic fixtures. They exercise software behaviour but do not satisfy the assignment's requirement for independently measured physical objects.
+Updated: 2026-11-01 (Europe/Kyiv).
 
-## Prepare the evidence
+**Real photographs have been tested; physical measurement accuracy has not been established.** These are different statements. Exploratory measurements and refusals are useful evidence about the application, but the current print-scale and reference-measurement information cannot support a calibrated error bound. The generated scenes in `web/samples/` remain explicitly synthetic software regressions.
 
-1. Select at least two different physical objects with circular inner boundaries. Include real ring photographs; identify any circular cut-outs or other holes as supplementary examples. Give each object a stable ID, A or B.
-2. Independently measure each object's internal diameter before running the app. Prefer the internal jaws of a caliper, check its zero, and record the instrument, resolution, method, and any stated instrument uncertainty. A ruler is acceptable only with its coarser reading uncertainty explicitly recorded; do not report caliper-like precision from a ruler.
-3. Measure across the inner opening, avoiding bevels, at two perpendicular directions with three repeat readings in each direction. Keep the raw readings and describe how the reference diameter and reference uncertainty were derived. Noticeable differences between directions indicate an oval opening: use another object for the circular normal cases, or label this as a difficult case. Repetition alone does not prove instrument accuracy.
-4. Keep an evidence photograph showing the instrument reading and the object ID. Store these control measurements separately from the app inputs. Never type the known diameter into the app or use the app's own output as ground truth.
-5. Print the application's marker at **100% / actual size**, with page fitting disabled. Measure both outer sides of the black square and record the readings: the intended side length is **20 mm**. Reprint if the measured size is inconsistent with 20 mm at the instrument's stated resolution. A distorted print must not be treated as a correct scale.
-6. Place one ring and the verified marker flat on the same plane, separated and fully visible. Use the documented supported conditions: near-overhead view, plain contrasting surface, diffuse light, sharp focus, and no digital alteration of the geometry. Take photographs using the phone's normal camera app, then upload the saved files; the web app needs no camera permission.
+## Evidence already supplied
 
-Use photographs you own and can share. Preserve the original app-input files, control-measurement evidence, and a separate ground-truth record in the submission test set. Label supplementary and synthetic material explicitly.
+The current work uses the existing photographs and already reported measurements. It does not ask the user for more photographs, repeated readings or another print.
 
-## Record expectations before evaluation
-
-Save or commit the ground-truth record and expected-outcome table **before** uploading the inputs. Choose and record any target error criterion beforehand; it is a test criterion, not an already established accuracy claim. Do not revise expectations after seeing the output without retaining the original expectation and explaining the change.
-
-Include these cases:
-
-- **Normal A:** a supported photo of independently measured object A; expect a measurement and the correct detected inner boundary and marker.
-- **Normal B:** a supported photo of a different independently measured object B; expect a measurement and correct boundaries.
-- **Ambiguity:** both objects visible in the same photo; expect a request to keep only one ring, without choosing a diameter arbitrarily.
-- **Correction:** a newly taken photo after following that instruction, showing A alone with the marker; expect measurement. This records a complete correction flow.
-- **Decline:** a photo with the marker absent, or a deliberately blurred / excessively tilted photo; choose the condition and expected response in advance. Expect no diameter and actionable retake guidance.
-
-The two normal inputs plus an unsupported input are the minimum physical dataset; the ambiguity and correction pair additionally covers the assignment's correction/ambiguity requirement. Run each original file through the actual upload flow, using the same app version, and retain failures.
-
-## Ground-truth record — fill before the app run
-
-| Field | Object A | Object B |
+| Object / case | Existing inputs | Independent comparison information |
 | --- | --- | --- |
-| Object description; real ring or labelled supplementary hole | | |
-| Instrument / resolution / stated uncertainty | | |
-| Direction 1: three raw readings (mm) | | |
-| Direction 2: three raw readings (mm) | | |
-| Reference internal diameter (mm) | | |
-| Reference uncertainty and derivation | | |
-| Raw measurement evidence filename | | |
-| Normal input filename | | |
+| Ordinary gold ring with wavy band | Photos 1–4 of the `2026-11-01_11-04-10` batch | User reported approximately 1.6 cm = **16 mm** internal diameter |
+| Ring with protrusions | Photos 6–8 of the same batch | User reported approximately 1.7 cm = **17 mm** internal diameter |
+| Ambiguous scene | Photo 5, both rings visible | Expected refusal; no single reference diameter applies |
+| Supplementary flat washer | Existing `2026-10-31_20-06-53` batch | User reported approximately 1 cm = **10 mm** opening |
+| Thick ring and unsupported images | Existing private attachment photos, public no-marker photos and labelled synthetic fixtures | Refusal regressions; no accepted diameter is required |
 
-| Shared setup field | Recorded value |
-| --- | --- |
-| Marker file / print settings | |
-| Measured marker width and height (mm) | |
-| Marker measurement instrument / resolution | |
-| Expected outcomes frozen at; commit or dated record | |
-| Preselected target error criterion and reason | |
-| App version / commit | |
-| Browser / device | |
+The reported ring diameters are independent of the algorithm, but their instrument, resolution, repeated readings and uncertainty were not supplied. They are approximate references, not precision ground truth. The detector receives only pixels and image dimensions. Filenames, object identity, expected outcomes and reference diameters must never be passed to contour detection or used to tune a result to a known answer.
 
-## Results — intentionally blank until collected
+Actual outcomes, visual contour observations and comparisons for the current jewellery run are in [JEWELLERY-VALIDATION.md](JEWELLERY-VALIDATION.md). Earlier observations are in [VERIFICATION.md](VERIFICATION.md). The reports retain all tested inputs, including refusals and discrepancies.
 
-| Case / filename | Expected outcome recorded before run | Actual outcome | Reference diameter (mm) | Estimated diameter (mm) | Absolute error (mm) | Displayed uncertainty | Time to useful result (ms) | Processing time (ms) | Variable cost and assumptions | Notes / evidence |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Normal A / | Measure; inner edge and marker correct | | | | | | | | | |
-| Normal B / | Measure; inner edge and marker correct | | | | | | | | | |
-| Ambiguity / | Request one ring; no diameter | | | | | | | | | |
-| Corrected A / | Measure after correction | | | | | | | | | |
-| Unsupported / | Decline; chosen reason: | | | | | | | | | |
+## Marker identity and scale
 
-For each accepted photograph compute **absolute error = |estimated diameter − independent reference diameter|** using the unrounded estimate when available. For an intentionally declined photo report error as “N/A — no estimate” and record whether the refusal matched the expectation. An unexpected rejection of a normal photo is a failure, not a zero-error measurement. Check and record the boundary overlay as well as the number: an apparently good number from the wrong boundary is not a successful detection.
+The photographs show the **new compensated print**. The **21.62 mm** dimension printed in its explanatory text describes the file size before printer shrinkage. The intended physical black square is **20 × 20 mm**. Its actual printed width and height have not been independently confirmed.
 
-Measure time to useful result from selecting the file until a measurement or actionable retake instruction appears; record the app's processing time separately. Record local API cost as no paid per-image API calls only if that is the actual path; report any other variable costs and hosting separately. Note whether an initial library load is included, and whether timing is a first or repeat run.
+The old print with an **18.5 mm** black square was discarded. It is historical information about the reason for compensation, not the scale of the current photographs. Neither 18.5 mm nor 21.62 mm should replace the engine's specified 20 mm marker assumption for the current run.
 
-## Interpretation and submission
+Marker recognition verifies the encoded pattern and image geometry; it cannot establish the physical dimensions of a sheet from the image alone. A scale error affects every reported diameter proportionally. For a uniformly scaled marker with actual side length `L`, a reported diameter based on 20 mm would scale by `L / 20`. The current value of `L` is unknown, so no numerical correction is justified. Unequal print scaling in the two directions would require more than that single factor.
 
-Report every tested input, observed error, false acceptance, refusal, and correction result. Discuss image conditions, print-scale uncertainty, reference-instrument uncertainty, and the small sample size. Compare errors with the uncertainty shown by the app, without treating a handful of observations as a validated statistical confidence interval. If the app understates uncertainty or accepts an unsupported photo, record that limitation and adjust the implementation or narrow the supported conditions before rerunning new, separately recorded tests.
+## How the existing evidence is evaluated
 
-Until this record is filled with real evidence, the delivery notes must say **physical validation pending**. Synthetic regression tolerances and source-table rounding do not establish real-photo accuracy.
+1. Preserve original input files and their SHA256 hashes. Keep private photographs, manifests and derived images out of the public repository and deployment archive.
+2. Record the engine version, source hash and source commit state. Keep the earlier run intact when producing a new report.
+3. Run each original through the production engine. The local evaluator follows the app's EXIF orientation, white background and maximum 1600-pixel dimension, using Sharp for decoding. Its Lanczos3 interpolation can differ from browser canvas; report local-core and actual-browser results separately.
+4. Inspect the marker and inner-edge overlays visually. A number close to the approximate reference is not a successful detection if the contour follows a shadow or a reflection instead of the metal's inner edge.
+5. After analysis, record the difference from the approximate reference for an accepted result. Label it **difference from an approximate reference**, not validated measurement error. For a refusal, use **N/A — no diameter**. An unexpected rejection of a normal input remains a failed measurement attempt.
+6. Retain marker, perspective, blur, clipping, boundary stability and ambiguity checks. Photo 5 must not publish a diameter chosen arbitrarily from two rings. Test the known washer and thick-ring cases as regressions.
+7. Record the observed time to a useful result in the browser. Record local decode and engine time separately; identify cold initialization, resampling differences and any skipped checks. No paid per-image inference API is used by this implementation; device compute and hosting/bandwidth are separate costs.
+
+The public local runner is `scripts/evaluate-local.cjs`. Its manifest and output directory belong in ignored `artifacts/`. It stores source/input hashes, results, overlays and timings; optional approximate references are compared only after `engine.analyze` returns. A new output directory preserves earlier evidence.
+
+## What remains unvalidated
+
+The current data do not establish:
+
+- The actual dimensions or dimensional uniformity of the replacement marker.
+- Precise internal diameters or uncertainty of the two jewellery references.
+- The displayed uncertainty as a statistical confidence interval or physical error bound.
+- Accuracy across different cameras, lighting, reflective materials, raised/thick rings or camera distortion.
+- That the ring's measurable edge and the marker lie in the same physical plane merely because both appear in one image.
+
+A future accuracy study would need independently documented marker dimensions and object references, a predeclared acceptance criterion, and evaluation on photographs held separate from algorithm development. Those are conditions for a stronger future claim, not a request to repeat the present user's inputs. The current delivery reports the available exploratory evidence and these limits honestly.

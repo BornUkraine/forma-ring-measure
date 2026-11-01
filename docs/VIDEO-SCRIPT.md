@@ -1,23 +1,32 @@
-# Walkthrough script — target2 minutes45 seconds
+# Сценарий демонстрации FORMA / RingMeasure — 2 минуты 45 секунд
 
-Record the actual running prototype. Do not present generated images as real photographs or claim calibrated physical accuracy.
+Показывать работающий сайт и фактический результат текущей версии. Можно записать экран без голоса, с короткими титрами. В прочитанном ТЗ голос, английская озвучка, лицо в кадре и Railway явно не обязательны. Запись на телефоне или на компьютере подходит; интерфейс должен быть удобен на мобильном экране.
 
-**0:00–0:20 — Problem and input.** “Forma estimates the inside diameter of one ring from an uploaded photograph. The printed square is20 mm. The app asks for no diameter or manual scale entry and needs no camera permission.” Show the page and marker download.
+## До записи
 
-**0:20–0:45 — Capture conditions.** Show the photo guide: print100%, verify the black square with a ruler, lay both objects on the same plane, use sharp diffuse lighting, photograph near overhead. Explain the supported plain-background case.
+- Открыть [существующий сайт](https://forma-ring-lab-eugene-2026.realove-io.chatgpt.site/) под аккаунтом владельца.
+- Подготовить уже имеющееся **фото №1** из серии `2026-11-01_11-04-10`: на проверке версии 1.2.0 браузер показал 17,0 мм, с обводкой по внутреннему металлическому краю. Это выбор по контуру, а не по близости к сообщённым 16 мм. Показывать фактическое число и время нового запуска. Итоговая таблица — в [JEWELLERY-VALIDATION.md](JEWELLERY-VALIDATION.md).
+- Для отказа подготовить фото №5 с двумя кольцами: проверенный результат — `multiple_rings`, без диаметра. Фото №6–8 можно показать как оставшееся ограничение: `ring_not_found`.
+- Резервный успешный пример — существующая фотография шайбы `photo_6_2026-10-31_20-06-53.jpg`: текущая версия показала 9,8 мм. Не выдавать шайбу за ювелирное кольцо.
 
-**0:45–1:20 — Complete flow.** Upload the existing washer photo `photo_6_2026-10-31_20-06-53.jpg` from files. It previously displayed10.0 mm in the browser; show the actual current result rather than promising that value. Show automatic scale recognition, inner boundary, diameter, provisional uncertainty and processing time. Explain that the user's ruler reference was approximately10 mm, the final printed marker scale was not independently confirmed, and the washer lies outside the sourced ring-size chart. If a successful example in the chart is useful, use the explicitly labelled17 mm synthetic example; never call it a real measurement.
+Новые фотографии и повторные замеры для записи не нужны. Личные снимки не включать в публичный репозиторий или статическую сборку.
 
-**1:20–1:45 — Difficult input.** Show an existing ring photo that is declined, or the missing-marker example. Show that no diameter is offered and read the actual instruction. Explain that inner-wall shadows currently prevent reliable opening isolation on this thick object; a refusal does not prove the photograph itself is unsuitable.
+## Последовательность
 
-**1:45–2:15 — Evidence and limits.** Show the recorded expected/actual synthetic results and their errors, clearly labelled synthetic. Summarize the existing physical-photo results: one washer produced browser measurements, the thick ring did not, and the final18 photos all returned `ring_not_found` in the unchanged core evaluation. Do not invent an error for a declined photo. Physical accuracy and the displayed uncertainty remain unvalidated. Physical testing has ended for this delivery.
+| Время | Что показать | Короткий текст голосом или титром |
+| --- | --- | --- |
+| **0:00–0:15** | Главная страница и кнопка загрузки | «FORMA оценивает внутренний диаметр кольца по готовой фотографии. Камера и ручной ввод диаметра не нужны.» |
+| **0:15–0:40** | Выбрать подготовленный реальный файл обычной кнопкой загрузки; дождаться результата | «Обработка идёт локально в браузере. Приложение ищет кодированный маркер и внутренний край кольца.» |
+| **0:40–1:10** | Приблизить разметку: сначала маркер, затем внутренний край металла | «Проверяем сам контур: он должен идти по металлу, а не по тени. Одного правдоподобного числа недостаточно.» Показывать фактическую обводку, сохраняя замечания из отчёта. |
+| **1:10–1:35** | Диаметр, условную оценку неопределённости и фактическое время обработки в интерфейсе | «Это результат именно этого запуска. Пользователь отдельно сообщил примерно 16 мм для обычного кольца и 17 мм для кольца с выступами. Эти значения не передаются алгоритму.» Не подставлять заранее обещанное число или время. |
+| **1:35–2:05** | Загрузить фото 5 либо подготовленный пример без маркера | «При неоднозначности или непригодном входе приложение показывает причину отказа и не публикует диаметр.» Прочитать или выделить реальный текст отказа; не приписывать ему другую причину. |
+| **2:05–2:30** | Короткий титр об ограничениях; при необходимости строку итогового отчёта | «На новом листе 21,62 мм — размер в файле до уменьшения принтером. Цель на бумаге — 20 × 20 мм; фактический размер не подтверждён. Старый лист 18,5 мм выброшен. Физическая точность пока не доказана.» |
+| **2:30–2:45** | Итоговая таблица проверок и ссылка на репозиторий | «В отчёте сохранены успешные измерения, отказы и расхождения. Платных API-вызовов на снимок нет; расходы на хостинг и трафик отдельные. Проверяющим ещё нужно предоставить доступ.» |
 
-**2:15–2:45 — Reproducibility and cost.** Show the repository instructions, `npm test`, algorithm and validation documents. Explain browser-local processing, no image upload to a service, no per-image paid API charge, and separate hosting/bandwidth cost. Identify the next improvement: real-object validation and stronger handling of reflective/low-contrast rings.
+Если выбран резервный пример шайбы, в блоке 1:10–1:35 назвать её дополнительным тестом с приблизительным ориентиром 10 мм. Результаты двух ювелирных колец показать по отчёту, включая отказы. Встроенные примеры всегда обозначать как синтетические.
 
-## Phone and hosting
+## Доступ и сдача
 
-The brief requires a phone-friendly browser demo and a walkthrough no longer than three minutes. It does not require Railway or recording on a particular device. A phone screen recording is a useful way to demonstrate the mobile upload flow; a desktop screen recording is also acceptable. No face-camera recording is needed.
+На последней проверке Site доступен **только владельцу**, внешние посетители не настроены. Доступ при обновлении сайта сохраняется прежним. На телефоне использовать тот же аккаунт ChatGPT; адрес `127.0.0.1:4173` относится к самому устройству и не открывает сайт компьютера на другом устройстве.
 
-Current hosted URL: https://forma-ring-lab-eugene-2026.realove-io.chatgpt.site
-
-The Site currently permits only its owner account. On a phone, open this HTTPS URL and sign in with the same ChatGPT account. `127.0.0.1:4173` refers to the device opening it and is not the computer's address when used on a phone. Reviewer access must be arranged before submission; do not assume a public GitHub repository makes the hosted Site public. Any static HTTP host can serve the built `dist/` directory, so a Railway migration is optional.
+Перед сдачей остаются запись демонстрации и предоставление доступа проверяющим. Публичный GitHub сам по себе не открывает Site. Изменение аудитории — отдельное действие; этот сценарий её не меняет. Переезд на Railway не требуется для демонстрации работающего статического приложения.

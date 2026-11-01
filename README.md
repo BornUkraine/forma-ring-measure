@@ -12,7 +12,7 @@ npm start
 
 Open **http://127.0.0.1:4173**. Always serve over HTTP/HTTPS; do not open `index.html` as a file, because the worker needs a proper origin. Set `PORT` if 4173 is occupied.
 
-For development checks, install the pinned development dependencies (Node20.9 or newer is required for the optional real-photo decoder):
+For development checks, install the pinned development dependencies (Node 20.9 or newer is required for the photo decoder and transformed-marker regression):
 
 ```sh
 npm ci
@@ -35,9 +35,17 @@ npm run build
 
 **Physical accuracy is not yet validated.** The included examples are explicitly labelled synthetic geometry, not photographs of independently measured objects. On these idealised inputs, small numerical error only verifies the geometry pipeline. It does not establish performance on reflective jewellery, shadows, printer error or real camera optics.
 
-The displayed uncertainty is an engineering estimate, not a confidence interval or tested physical error bound. The prototype intentionally supports a narrow case: a well-defined dark/contrasting band on a light matte surface. Broad circular bands and flat washers can be detected when their outer-to-inner diameter ratio is at most 3:1; supplementary washer measurements do not establish accuracy on jewellery. Bright reflective rings, stones, transparent bands, patterned backgrounds, fingers, non-circular/raised rings and strong perspective may be rejected or unreliable. Objects must really share a plane; a single image cannot prove that assumption.
+The displayed uncertainty is an engineering estimate, not a confidence interval or tested physical error bound. The prototype supports a well-defined dark band, or a continuous warm-coloured metal rim, on a light matte surface. The metal-rim path checks paired local colour transitions around the opening so that a bright patch inside a shadow does not automatically become the measured boundary. Broad circular bands and flat washers can be detected when their outer-to-inner diameter ratio is at most 3:1. Pale/silver metal, strong reflections, stones, transparent bands, patterned backgrounds, fingers, non-circular/raised rings and strong perspective may still be rejected or unreliable. Objects must really share a plane; a single image cannot prove that assumption.
 
-Complete the real-object protocol in [docs/PHYSICAL-VALIDATION.md](docs/PHYSICAL-VALIDATION.md) with at least two independently measured objects and one unsupported image before making any physical accuracy claim or calling the hiring submission complete.
+The existing jewellery-photo results, failures and differences from the user's approximate references are recorded in [docs/JEWELLERY-VALIDATION.md](docs/JEWELLERY-VALIDATION.md). Those references are never passed to the detector. The compensated marker targets a physical 20 × 20 mm, but its actual printed dimensions remain unverified. [docs/PHYSICAL-VALIDATION.md](docs/PHYSICAL-VALIDATION.md) explains the limits of this evidence and the separate requirements for a future accuracy claim.
+
+Private local photo sets can be evaluated without adding images to the repository:
+
+```sh
+node scripts/evaluate-local.cjs artifacts/my-set/manifest.json --output-dir artifacts/my-set/run-1
+```
+
+The script documents the manifest format in its header, records original hashes and overlays, and compares optional approximate references only after analysis. Keep its inputs and outputs in ignored `artifacts/`. These Sharp/core results are separate from browser canvas and end-to-end UI measurements.
 
 ## Architecture and privacy
 
@@ -50,7 +58,7 @@ Complete the real-object protocol in [docs/PHYSICAL-VALIDATION.md](docs/PHYSICAL
 - `scripts/`: static server/build, reproducible fixtures and evaluation.
 - `tests/expected.json`: separate analytic ground truth, never requested by the app.
 
-Photos are not transmitted to a server or saved by the app. There is no account, analytics, inference API, speech service, payment, database or camera permission. Hosting still serves application assets and has ordinary access logs. The sizing source link opens the external publisher's page only when selected.
+Photos are not transmitted to a server or saved by the app. The application has no separate account system, analytics, inference API, speech service, payment, database or camera permission. The owner-only Site hosting requires sign-in, serves application assets and has ordinary access logs. The sizing source link opens the external publisher's page only when selected.
 
 ## Timing and cost
 
@@ -72,4 +80,4 @@ node scripts/download-real-photos.mjs
 npm run test:real
 ```
 
-This runs the unchanged application measurement engine on actual decoded photograph pixels. It explicitly reports that browser UI automation was unavailable during this follow-up and that its timings are Node read/decode/engine timings, not browser end-to-end measurements. Resampling by Sharp can differ from browser canvas. The run checks safe refusal on unsupported images, not real-world diameter accuracy. See `docs/REAL-PHOTO-VALIDATION.md` and `docs/REAL-PHOTO-RESULTS.json`.
+This runs the application measurement engine on actual decoded photograph pixels. The historical Commons report records that browser UI automation was unavailable during that 2026-10-31 follow-up; its timings are Node read/decode/engine timings, not browser end-to-end measurements. Browser QA was subsequently performed for the current jewellery set. Resampling by Sharp can differ from browser canvas. The Commons run checks safe refusal on unsupported images, not real-world diameter accuracy. See `docs/REAL-PHOTO-VALIDATION.md` and `docs/REAL-PHOTO-RESULTS.json`.

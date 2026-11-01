@@ -1,6 +1,6 @@
 # Delivery notes — Forma prototype
 
-Date:2026-10-31 (Europe/Kyiv). New prototype built for the supplied assignment. The core flow is an existing-photo upload; there is no camera integration.
+Updated: 2026-11-01 (Europe/Kyiv). Existing Forma / RingMeasure prototype continued for the supplied assignment. The core flow is an existing-photo upload; there is no camera integration.
 
 ## What is delivered
 
@@ -14,13 +14,13 @@ Date:2026-10-31 (Europe/Kyiv). New prototype built for the supplied assignment. 
 
 See `SYNTHETIC-RESULTS.json` for actual expected/observed results, absolute diameter errors and timings. All included generated images are synthetic. Analytic ground truth was specified in the fixture generator before evaluation. They are not evidence of real-object measurement accuracy.
 
-**Exploratory follow-up:** private real photographs of a broad washer and a thick ring were tested. A candidate-width filter was corrected without changing the quality checks. Two washer photographs were accepted in the ordinary browser flow, displaying10.0 mm and9.8 mm; the ring inputs were declined. Full observations and evidence limits are summarized in `VERIFICATION.md`. Original user photos and detailed reports remain private local evidence rather than public repository fixtures.
+**Exploratory real-photo evidence:** the existing private photographs of a broad washer and a thick ring are retained for regression checks. Work continued on 2026-11-01 with eight already supplied photographs of two jewellery rings, including one photograph containing both rings. The latest per-photo outcomes, contour observations, timings and comparisons are recorded in [JEWELLERY-VALIDATION.md](JEWELLERY-VALIDATION.md); earlier runs remain documented in [VERIFICATION.md](VERIFICATION.md). A rejection is recorded as a rejection, not a zero-error measurement or proof that the physical ring is oval.
 
-The final18 ring photographs (`20-39-51` batch) were evaluated with unchanged engine1.1.0 at commit `6547ca67a4988f6095772ac83dfa1b133a925ca9`. All markers passed, but every input returned `ring_not_found`. Read-only analysis exposed a segmentation limitation under inner-wall shadows; these refusals do not prove that all photographs were unsuitable. No diameter or accuracy result was manufactured.
+The user independently reported approximate inner diameters of **16 mm** for the ordinary wavy ring and **17 mm** for the ring with protrusions. These values are comparison metadata and never contour-search inputs. They are approximate references, not calibrated ground truth. Original photos, local manifests, detailed reports and image overlays remain private in ignored `artifacts/` or their existing local locations. They are not public repository fixtures. The public `scripts/evaluate-local.cjs` can reproduce a local manifest run without embedding private paths or photographs.
 
-**Testing closed:** physical testing ended after this final batch. Only the washer yielded diameter estimates; the second physical object did not. The final print scale remains unverified, so physical accuracy evidence is incomplete. The displayed uncertainty is still provisional and unvalidated. `PHYSICAL-VALIDATION.md` documents the unfinished protocol; no further physical tests are included in this delivery.
+**Physical accuracy remains unvalidated.** The current photographs use the compensated replacement marker. Its **21.62 mm** file dimension was intended to become **20 × 20 mm** after printer shrinkage; the actual width and height of the new print are unconfirmed. The old **18.5 mm** print was discarded and must not be used as the scale for these photos. Numerical agreement with an approximate ring reference cannot validate an unknown print scale or the displayed provisional uncertainty. [PHYSICAL-VALIDATION.md](PHYSICAL-VALIDATION.md) separates the existing exploratory evidence from what would be needed for a future accuracy claim. This delivery uses the existing images and measurements; it does not require the user to repeat them.
 
-The static demo/repository can be reviewed now. A complete hiring submission additionally needs reviewer access, real-object evidence and a recorded walkthrough. A ready-to-record script is supplied in `VIDEO-SCRIPT.md`. No submission form has been sent.
+The static demo and repository can be reviewed with these limitations. Before submission, a walkthrough recording and reviewer access still need to be arranged. The existing Site is **owner-only**, with no external visitors configured at the latest access check; its audience has been preserved. A public GitHub repository does not grant access to the hosted Site. The Russian script in [VIDEO-SCRIPT.md](VIDEO-SCRIPT.md) targets 2 minutes 45 seconds. The available brief does not explicitly require voice narration, English narration, a face camera or Railway. No submission form has been sent.
 
 ## Reuse and original work
 

@@ -1,6 +1,8 @@
 # Verification record
 
-Verified on2026-10-31, Europe/Kyiv, using Node24.5.0 and the connected Chromium-based in-app browser.
+Latest verification: **2026-11-01, engine 1.2.0**, using Node 24.5.0 and the connected Chromium-based in-app browser. See [JEWELLERY-VALIDATION.md](JEWELLERY-VALIDATION.md) and [JEWELLERY-RESULTS.json](JEWELLERY-RESULTS.json) for all eight new photo outcomes: four measurements, one ambiguity refusal and three unresolved ring detections. All 40 tests and 14 analytic evaluations pass; the 17 available real regression statuses/codes are preserved. Browser uploads, report export, refusal recovery, 390 × 844 mobile and 1440 × 900 wide layouts were checked. The marker and metal-boundary changes are described in [ALGORITHM.md](ALGORITHM.md).
+
+The sections below preserve the **historical 2026-10-31 record**. Their timings and measurements describe those earlier runs, not the current engine.
 
 ## Automated checks
 
@@ -45,7 +47,7 @@ The user reported an approximately10 mm washer opening with a ruler. The origina
 
 ## Remaining evidence
 
-Physical testing ended after the final18-photo batch. Two physical objects were photographed, but only the washer yielded diameter estimates; the ring did not. This does not establish physical accuracy across the requested test set, and the final print scale remains unverified. Physical accuracy and the provisional uncertainty remain unvalidated. `PHYSICAL-VALIDATION.md` retains the unfinished protocol; no completed accuracy report is claimed. The video script is supplied; an actual walkthrough recording and reviewer access still need to be arranged for submission.
+At the earlier 18-photo cutoff, only the washer yielded diameter estimates. Work then continued on the eight jewellery photos supplied on 2026-11-01. The ordinary ring now produces four estimates around 17.0–17.3 mm; the ring with protrusions still produces no estimate. The approximate references and unverified replacement-print scale do not establish physical accuracy or validate the displayed uncertainty. `PHYSICAL-VALIDATION.md` distinguishes that pending accuracy claim from the real exploratory evidence already collected. No new photographs or repeated reference readings are requested for this delivery. A walkthrough recording and reviewer access still need to be arranged.
 
 ## Session time
 

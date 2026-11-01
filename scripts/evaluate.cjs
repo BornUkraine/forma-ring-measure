@@ -21,7 +21,7 @@ cv.then(()=>{
   }
   const report={
     runAt:new Date().toISOString(),runtime:process.version,engine:'OpenCV4.10.0 / Forma',
-    inputType:'synthetic-analytic-fixtures',physicalValidation:'PENDING — no independently measured real objects have been supplied.',
+    inputType:'synthetic-analytic-fixtures',physicalValidation:'Physical accuracy remains unvalidated. Existing approximate real-object comparisons are recorded separately in JEWELLERY-VALIDATION.md.',
     timingScope:'Node image decode + same pixel measurement engine. Excludes cold OpenCV download/initialization; browser displays end-to-end user-operation latency separately.',
     costAssumptions:'No network inference/recognition/reasoning/speech/retry or intermediary API calls. Paid API variable charges: USD0/image. Device compute/energy not priced. Hosting and bandwidth separate; no free credits assumed.',
     passed:results.filter(x=>x.passed).length,total:results.length,results
