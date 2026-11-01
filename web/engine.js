@@ -319,20 +319,247 @@
                 if (insideQuad(center, marker.corners)) continue;
                 const previous = objects.find((o) => distance(o.center, center) < maxSide * 0.25);
                 if (previous) previous.thresholds.add(threshold);
-                else objects.push({ center, thresholds: new Set([threshold]) });
+                else objects.push({ center, rect, thresholds: new Set([threshold]) });
               } finally { contour.delete(); }
             }
           } finally { mask.delete(); contours.delete(); hierarchy.delete(); }
         }
       } finally { vetoKernel.delete(); }
-      return { stable, objectCount: objects.filter((o) => o.thresholds.size === 2).length };
+      const confirmed = objects.filter((o) => o.thresholds.size === 2);
+      if (!stable.length && confirmed.length === 1) stable.push(...findShadowedMetalRims(cv, gray, chroma, marker, h, confirmed[0].rect));
+      return { stable, objectCount: confirmed.length, innerMaterialConflict: hasInnerMaterialConflict(cv, gray, chroma, marker, h, stable) };
     } finally { chroma.delete(); kernel.delete(); for (const mask of masks) mask.delete(); }
+  }
+
+  function shadowEllipseFit(cv, points) {
+    const mat = cv.matFromArray(points.length, 1, cv.CV_32FC2, points.flatMap(p => [p.x, p.y]));
+    try { return cv.fitEllipse(mat); } finally { mat.delete(); }
+  }
+  function shadowPointResidual(p, e) {
+    const theta = -e.angle * Math.PI / 180, dx = p.x - e.center.x, dy = p.y - e.center.y;
+    return Math.hypot((dx * Math.cos(theta) - dy * Math.sin(theta)) / (e.size.width / 2),
+      (dx * Math.sin(theta) + dy * Math.cos(theta)) / (e.size.height / 2)) - 1;
+  }
+  function shadowMaximumGap(support) {
+    let run = 0, largest = 0;
+    for (let i = 0; i < support.length * 2; i++) {
+      run = support[i % support.length] ? 0 : run + 1;
+      largest = Math.max(largest, run);
+    }
+    return Math.min(largest, support.length) * 360 / support.length;
+  }
+  function shadowSeedRefinement(cv, gray, chroma, seed, h) {
+    const points = [], verified = [], pairs = [], strongColours = [], localGrays = [];
+    const sourcePoints = ellipsePoints(seed.imageEllipse, 144);
+    const radius = Math.min(seed.imageEllipse.size.width, seed.imageEllipse.size.height) / 2;
+    const inward = Math.min(30, Math.max(8, Math.round(radius * .22)));
+    const outward = Math.max(3, Math.round(radius * .035));
+    const band = Math.min(45, Math.max(18, Math.round(radius * .35)));
+    for (const p of sourcePoints) {
+      const dx = p.x - seed.center.x, dy = p.y - seed.center.y, len = Math.hypot(dx, dy), ux = dx / len, uy = dy / len;
+      const colour = t => sampleGray(chroma, p.x + ux * t, p.y + uy * t);
+      let best = { score: -Infinity, offset: 0, gain: 0, entry: 0, exit: 0 };
+      for (let t = -inward; t <= outward; t++) {
+        const gain = (colour(t + 2) - colour(t - 2)) / 4;
+        const inside = mean([-6, -5, -4].map(d => colour(t + d)));
+        let peak = -Infinity, exterior = Infinity;
+        for (let d = 2; d <= Math.min(19, band - 4); d++) peak = Math.max(peak, colour(t + d));
+        for (let d = 14; d <= band; d++) exterior = Math.min(exterior, colour(t + d));
+        const entry = peak - inside, exit = peak - exterior;
+        // Local paired-colour signal proposes an inner edge. This proposal is
+        // not yet an observation; unsupported points never enter the fit.
+        const score = gain;
+        if (score > best.score) best = { score, offset: t, gain, entry, exit };
+      }
+      const q = { x: p.x + ux * best.offset, y: p.y + uy * best.offset };
+      const profile = Array.from({ length: 11 }, (_, i) => sampleGray(gray, q.x + ux * (i - 5), q.y + uy * (i - 5)));
+      const contrast = Math.max(...profile) - Math.min(...profile);
+      const sharpness = Math.max(...profile.slice(1).map((v, i) => Math.abs(v - profile[i]))) / Math.max(1, contrast);
+      const oldColour = best.gain >= 2 && best.entry >= 12 && best.exit >= 12;
+      const localGray = contrast >= LIMITS.minEdgeContrast && sharpness >= LIMITS.minSharpnessRatio;
+      pairs.push(best.gain >= .75 && best.entry >= 6 && best.exit >= 6);
+      strongColours.push(oldColour); localGrays.push(localGray);
+      verified.push(oldColour || localGray);
+      points.push(q);
+    }
+    let support = [...verified];
+    if (mean(support.map(Number)) < .75 || mean(pairs.map(Number)) < .55) return null;
+    let imageEllipse = shadowEllipseFit(cv, points.filter((_, i) => support[i]));
+    for (let iteration = 0; iteration < 2; iteration++) {
+      support = verified.map((valid, i) => valid && Math.abs(shadowPointResidual(points[i], imageEllipse)) <= .035);
+      if (mean(support.map(Number)) < .75 || shadowMaximumGap(support) > 35) return null;
+      imageEllipse = shadowEllipseFit(cv, points.filter((_, i) => support[i]));
+    }
+    const observed = points.filter((_, i) => support[i]), plane = observed.map(p => transformPoint(h, p));
+    const supportedPairFraction = mean(support.map((valid, i) => Number(valid && pairs[i])));
+    if (supportedPairFraction < .5) return null;
+    const ellipse = shadowEllipseFit(cv, plane), axes = [ellipse.size.width, ellipse.size.height], diameter = mean(axes);
+    if (!Number.isFinite(diameter) || diameter < LIMITS.minDiameterMm || diameter > LIMITS.maxDiameterMm) return null;
+    const jackknife = [];
+    for (let sector = 0; sector < 8; sector++) {
+      const sample = points.filter((_, i) => support[i] && Math.floor(i / 18) !== sector).map(p => transformPoint(h, p));
+      if (sample.length < 60) return null;
+      const fit = shadowEllipseFit(cv, sample);
+      jackknife.push(mean([fit.size.width, fit.size.height]));
+    }
+    const jackknifeSpreadMm = Math.max(...jackknife) - Math.min(...jackknife);
+    if (jackknifeSpreadMm > .2) return null;
+    const residual = fitResidual(plane, ellipse);
+    const result = { ...seed, source: 'partially-supported-metal-rim', imageEllipse, ellipse,
+      center: imageEllipse.center, axes, diameter, residual,
+      axisRatio: Math.min(...axes) / Math.max(...axes),
+      imageDiameterPx: Math.min(imageEllipse.size.width, imageEllipse.size.height),
+      edge: ringEdges(gray, imageEllipse), observedFraction: mean(support.map(Number)),
+      pairedColourFraction: mean(pairs.map(Number)), strongColourFraction: mean(strongColours.map(Number)),
+      supportedPairFraction,
+      localGrayFraction: mean(localGrays.map(Number)), maxUnsupportedArcDegrees: shadowMaximumGap(support),
+      jackknifeSpreadMm, supportedImagePoints: observed };
+    return result;
+  }
+
+  // Spatial top-hat proposals remove broad colour shading while preserving a
+  // narrow metal ridge. A coarse warm component supplies only an ROI, not scale
+  // or ring geometry. Every measurement is fitted to supported image samples.
+  function findShadowedMetalRims(cv, gray, chroma, marker, h, objectRect) {
+    const pad = 30, x = Math.max(0, objectRect.x - pad), y = Math.max(0, objectRect.y - pad);
+    const width = Math.min(chroma.cols - x, objectRect.width + pad * 2), height = Math.min(chroma.rows - y, objectRect.height + pad * 2);
+    const roi = chroma.roi(new cv.Rect(x, y, width, height));
+    const closeKernel = cv.Mat.ones(5, 5, cv.CV_8U), candidates = [];
+    const clipped = objectRect.x < 3 || objectRect.y < 3 || objectRect.x + objectRect.width > gray.cols - 3 || objectRect.y + objectRect.height > gray.rows - 3;
+    try {
+      for (const kernelSize of [15, 25]) {
+        const kernel = cv.getStructuringElement(cv.MORPH_ELLIPSE, new cv.Size(kernelSize, kernelSize)), highPass = new cv.Mat();
+        try {
+          cv.morphologyEx(roi, highPass, cv.MORPH_TOPHAT, kernel);
+          for (const [maskIndex, threshold] of [3, 4, 5, 6, 7, 8].entries()) {
+            const mask = new cv.Mat(), contours = new cv.MatVector(), hierarchy = new cv.Mat();
+            try {
+              cv.threshold(highPass, mask, threshold, 255, cv.THRESH_BINARY);
+              cv.morphologyEx(mask, mask, cv.MORPH_CLOSE, closeKernel);
+              cv.findContours(mask, contours, hierarchy, cv.RETR_LIST, cv.CHAIN_APPROX_NONE);
+              for (let index = 0; index < contours.size(); index++) {
+                const contour = contours.get(index);
+                try {
+                  if (contour.rows < 70) continue;
+                  const local = cv.fitEllipse(contour);
+                  const imageEllipse = { ...local, center: { x: local.center.x + x, y: local.center.y + y } };
+                  const pixelDiameter = Math.min(imageEllipse.size.width, imageEllipse.size.height);
+                  if (pixelDiameter < LIMITS.minRingDiameterPx || Math.max(imageEllipse.size.width, imageEllipse.size.height) > Math.max(objectRect.width, objectRect.height) * 1.1) continue;
+                  const points = Array.from({ length: contour.rows }, (_, i) => ({ x: contour.data32S[i * 2] + x, y: contour.data32S[i * 2 + 1] + y }));
+                  if (fitResidual(points, imageEllipse) > .08 || insideQuad(imageEllipse.center, marker.corners)) continue;
+                  const bins = new Set(points.map(p => Math.floor((Math.atan2(p.y - imageEllipse.center.y, p.x - imageEllipse.center.x) + Math.PI) * 36 / (Math.PI * 2)) % 36));
+                  if (bins.size / 36 < .7) continue;
+                  const plane = points.map(p => transformPoint(h, p)), ellipse = shadowEllipseFit(cv, plane);
+                  const diameter = mean([ellipse.size.width, ellipse.size.height]);
+                  if (diameter < LIMITS.minDiameterMm || diameter > LIMITS.maxDiameterMm) continue;
+                  const seed = { imageEllipse, center: imageEllipse.center, clipped, maskIndex, seedKernel: kernelSize, seedKey: `${kernelSize}/${threshold}`, points: points.length };
+                  const refined = shadowSeedRefinement(cv, gray, chroma, seed, h);
+                  if (refined) candidates.push(refined);
+                } finally { contour.delete(); }
+              }
+            } finally { mask.delete(); contours.delete(); hierarchy.delete(); }
+          }
+        } finally { kernel.delete(); highPass.delete(); }
+      }
+    } finally { roi.delete(); closeKernel.delete(); }
+    if (new Set(candidates.map(c => c.seedKernel)).size < 2) return [];
+    const spread = Math.max(...candidates.map(c => c.diameter)) - Math.min(...candidates.map(c => c.diameter));
+    if (spread > .35) return [];
+    let centerSpreadPx = 0;
+    for (const a of candidates) for (const b of candidates) centerSpreadPx = Math.max(centerSpreadPx, distance(a.center, b.center));
+    if (centerSpreadPx > Math.min(...candidates.map(c => c.imageDiameterPx)) * .02) return [];
+    for (const c of candidates) { c.seedSpreadMm = spread; c.seedCenterSpreadPx = centerSpreadPx; c.seedKernelCount = new Set(candidates.map(c => c.seedKernel)).size; }
+    return [{ ...candidates[0], observations: candidates }];
+  }
+
+  // A saturated decorative ridge may surround a neutral metal wall. Colour
+  // alone cannot distinguish that ridge from the opening. Search only for a
+  // competing sharp, fully enclosed inner boundary; never measure from it.
+  function hasInnerLuminanceConflict(cv, gray, marker, h, warmClusters) {
+    for (const cluster of warmClusters) {
+      const outer = cluster.observations[0], halfSide = Math.ceil(Math.max(outer.imageEllipse.size.width, outer.imageEllipse.size.height) * .7);
+      const x = Math.max(0, Math.floor(outer.center.x - halfSide)), y = Math.max(0, Math.floor(outer.center.y - halfSide));
+      const width = Math.min(gray.cols - x, halfSide * 2), height = Math.min(gray.rows - y, halfSide * 2);
+      const region = gray.roi(new cv.Rect(x, y, width, height)), roi = region.clone();
+      region.delete();
+      const localMarker = { ...marker, corners: marker.corners.map(p => ({ x: p.x - x, y: p.y - y })) };
+      const localH = [h[0], h[1], h[0] * x + h[1] * y + h[2],
+        h[3], h[4], h[3] * x + h[4] * y + h[5], h[6], h[7], h[6] * x + h[7] * y + h[8]];
+      const masks = [];
+      try {
+        // Eight-level increments resolve even a weak 15-level neutral wall.
+        // The much lower contrast threshold below is only a rejection cue;
+        // it never relaxes the contrast required for a reported measurement.
+        for (let level = 8; level < 256; level += 8) {
+          const mask = new cv.Mat(); masks.push(mask);
+          cv.threshold(roi, mask, level, 255, cv.THRESH_BINARY_INV);
+        }
+        const innerClusters = findRings(cv, roi, masks, localMarker, localH);
+        for (const inner of innerClusters) {
+          const reliable = inner.observations.filter(c => {
+            const center = { x: c.center.x + x, y: c.center.y + y };
+            if (c.clipped || c.diameter >= outer.diameter - .5 || c.residual > LIMITS.maxFitResidual
+              || c.edge.contrast < 12 || c.edge.sharpness < LIMITS.minSharpnessRatio
+              || distance(center, outer.center) > outer.imageDiameterPx * .15) return false;
+            const samples = ellipsePoints(c.imageEllipse, 96);
+            // A displaced illumination boundary often meets or crosses the
+            // actual rim. This veto needs a separate boundary wholly inside it.
+            if (samples.some(p => shadowPointResidual({ x: p.x + x, y: p.y + y }, outer.imageEllipse) > -.03)) return false;
+            const inwardStep = samples.map(p => {
+              const dx = p.x - c.center.x, dy = p.y - c.center.y, len = Math.hypot(dx, dy);
+              return sampleGray(roi, p.x - dx / len * 2, p.y - dy / len * 2)
+                - sampleGray(roi, p.x + dx / len * 2, p.y + dy / len * 2);
+            });
+            return mean(inwardStep.map(v => Number(v >= 8))) >= .85;
+          });
+          for (const candidate of reliable) {
+            const sameEdge = reliable.filter(c => Math.abs(c.diameter - candidate.diameter) <= .25
+              && distance(c.center, candidate.center) <= candidate.imageDiameterPx * .02);
+            if (new Set(sameEdge.map(c => c.maskIndex)).size >= 2) return true;
+          }
+        }
+      } finally { roi.delete(); for (const mask of masks) mask.delete(); }
+    }
+    return false;
+  }
+
+  function hasInnerMaterialConflict(cv, gray, chroma, marker, h, warmClusters) {
+    if (!warmClusters.length) return false;
+    if (hasInnerLuminanceConflict(cv, gray, marker, h, warmClusters)) return true;
+    const masks = [];
+    try {
+      for (const threshold of [12, 18]) {
+        const mask = new cv.Mat(); masks.push(mask);
+        cv.threshold(chroma, mask, threshold, 255, cv.THRESH_BINARY);
+      }
+      const low = findRings(cv, chroma, masks, marker, h);
+      for (const inner of low) {
+        if (new Set(inner.observations.map(c => c.maskIndex)).size < 2) continue;
+        const reliable = inner.observations.filter(c => {
+          if (c.residual > LIMITS.maxFitResidual || c.edge.contrast < 12 || c.edge.sharpness < LIMITS.minSharpnessRatio) return false;
+          const outward = ellipsePoints(c.imageEllipse, 48).map(p => {
+            const dx = p.x - c.center.x, dy = p.y - c.center.y, len = Math.hypot(dx, dy);
+            return sampleGray(chroma, p.x + dx / len * 2, p.y + dy / len * 2)
+              - sampleGray(chroma, p.x - dx / len * 2, p.y - dy / len * 2);
+          });
+          return mean(outward.map(v => Number(v >= 8))) >= .85;
+        });
+        if (new Set(reliable.map(c => c.maskIndex)).size < 2) continue;
+        const diameters = reliable.map(c => c.diameter);
+        if (Math.max(...diameters) - Math.min(...diameters) > .5) continue;
+        for (const cluster of warmClusters) {
+          const outer = cluster.observations[0];
+          if (median(diameters) < outer.diameter - .5 && distance(reliable[0].center, outer.center) < outer.imageDiameterPx * .15) return true;
+        }
+      }
+      return false;
+    } finally { for (const mask of masks) mask.delete(); }
   }
 
   function analyze(cv, imageData) {
     const start = typeof performance !== 'undefined' ? performance.now() : Date.now();
     const checks = [];
-    const metrics = { engine: 'OpenCV.js / RingMeasure 1.2', width: imageData && imageData.width, height: imageData && imageData.height, paidApiCalls: 0, paidApiCostUsd: 0 };
+    const metrics = { engine: 'OpenCV.js / RingMeasure 1.3', width: imageData && imageData.width, height: imageData && imageData.height, paidApiCalls: 0, paidApiCostUsd: 0 };
     const complete = (result) => ({ ...result, checks, metrics: { ...metrics, processingMs: Math.round((typeof performance !== 'undefined' ? performance.now() : Date.now()) - start) } });
     const reject = (code, message, guidance, extra = {}) => complete({ status: 'retake', code, message, guidance, ...extra });
     const check = (label, pass, detail) => checks.push({ label, pass, detail });
@@ -375,6 +602,10 @@
         check('One visible ring', false, `${metal.objectCount} substantial coloured objects found; unreadable openings cannot be ignored.`);
         return reject('multiple_rings', 'More than one possible ring is visible.', 'Use a photo containing one ring. An additional coloured object cannot be safely ignored even when its opening is unreadable.', { marker });
       }
+      if (metal.innerMaterialConflict) {
+        check('Unambiguous inner metal edge', false, 'A separate sharp material boundary is visible inside the proposed rim.');
+        return reject('ambiguous_boundary', 'More than one possible inner boundary is visible.', 'The decorative outer rim cannot substitute for the actual opening. Use an image where the complete inner metal edge is clearly distinguishable.', { marker });
+      }
       if (metal.objectCount && !metal.stable.length && stable.length === 1) {
         check('Metal boundary evidence', false, 'A coloured object is visible, but its complete inner metal edge is not supported.');
         return reject('uncertain_metal_boundary', 'The inner metal edge cannot be separated reliably from the shadow.', 'Use an image with a clear, continuous inner rim and diffuse light. A bright patch inside the opening is not a substitute for its metal boundary.', { marker });
@@ -382,10 +613,13 @@
       check('One visible ring', stable.length === 1, `${stable.length} unambiguous ring openings found.`);
       if (stable.length !== 1) return reject(stable.length ? 'multiple_rings' : 'ring_not_found', stable.length ? 'More than one ring opening was detected.' : 'A complete ring opening could not be measured.', 'Photograph one plain circular ring lying flat on a light, matte background. Show the complete inner edge and keep the marker separate from the ring.', { marker });
       const c = stable[0];
-      const observations = c.observations.filter((o) => o.maskIndex < 3).sort((a, b) => a.residual - b.residual);
+      const observations = c.observations.filter((o) => o.source || o.maskIndex < 3).sort((a, b) => a.residual - b.residual);
       const best = observations[0];
+      if (best.source === 'partially-supported-metal-rim') {
+        check('Observed rim support', true, `${Math.round(best.observedFraction * 100)}% supported samples; largest inferred arc ${best.maxUnsupportedArcDegrees.toFixed(1)} degrees. Independent fits agree within ${best.seedSpreadMm.toFixed(2)} mm.`);
+      }
       const ring = { center: best.center, points: ellipsePoints(best.ellipse).map((p) => transformPoint(inverse, p)), diameterPixels: mean([best.imageEllipse.size.width, best.imageEllipse.size.height]), axisRatio: best.axisRatio, fitResidual: best.residual };
-      check('Complete inner boundary', !best.clipped, best.clipped ? 'The ring reaches the edge of the image.' : 'The inner opening and surrounding band are fully visible.');
+      check('Ring fully in frame', !best.clipped, best.clipped ? 'The ring reaches the edge of the image.' : 'The opening and surrounding band are within the image. Small unsupported arcs, if present, are reported separately.');
       if (best.clipped) return reject('clipped_ring', 'Part of the ring is outside the photo.', 'Retake the photo with the complete ring and some clear background around it.', { marker, ring });
       check('Ring resolution', best.imageDiameterPx >= LIMITS.minRingDiameterPx, `Opening: ${Math.round(best.imageDiameterPx)} px; at least ${LIMITS.minRingDiameterPx} px required.`);
       if (best.imageDiameterPx < LIMITS.minRingDiameterPx) return reject('low_resolution', 'The ring is too small to measure reliably.', 'Move closer and upload the original photo. Keep the complete ring and marker in frame.', { marker, ring });
@@ -402,7 +636,7 @@
       if (spread > 0.5) return reject('unstable_boundary', 'The inner boundary changes too much between checks.', 'Retake with sharper focus and even lighting. Avoid deep shadows, reflections and patterned backgrounds.', { marker, ring });
       // Hole contours follow the surrounding dark pixel centres. Subtract one pixel diameter
       // to put the estimate midway across that black/white transition.
-      const diameterMm = median(diameters) - (best.source === 'chromatic-rim' ? 0 : 1 / marker.pixelsPerMm);
+      const diameterMm = median(diameters) - (best.source ? 0 : 1 / marker.pixelsPerMm);
       // The reported ellipse must depict the same median diameter as the number.
       const overlayScale = diameterMm / best.diameter;
       const displayedEllipse = { ...best.ellipse, size: { width: best.ellipse.size.width * overlayScale, height: best.ellipse.size.height * overlayScale } };
@@ -410,9 +644,9 @@
       ring.diameterPixels *= overlayScale;
       const geometricUncertainty = 2 / marker.pixelsPerMm + diameterMm * 0.01 + spread / 2 + best.residual * diameterMm;
       const uncertaintyMm = Math.ceil(Math.max(0.3, geometricUncertainty) * 10) / 10;
-      return complete({ status: 'ok', diameterMm, uncertaintyMm, uncertaintyNote: 'Engineering estimate, not a validated confidence interval. Assumes a correctly printed 20 mm marker, both objects flat, and low lens distortion.', marker, ring, supportedConditions: 'One plain circular ring on a light matte surface; the supplied 20 mm marker in the same plane; sharp, near-overhead photo.', diagnostics: { boundaryMethod: best.source || 'luminance-contour', thresholdSpreadMm: spread, edgeContrast: edge.contrast, edgeSharpnessRatio: edge.sharpness, correctedAxesMm: best.axes.map((v) => v * overlayScale), contourResidual: best.residual, ...(best.source === 'chromatic-rim' ? { rimCoverage: best.rimCoverage, minSectorCoverage: best.minSectorCoverage, chromaGradient: best.chromaGradient } : {}) } });
+      return complete({ status: 'ok', diameterMm, uncertaintyMm, uncertaintyNote: 'Engineering estimate, not a validated confidence interval. Assumes a correctly printed 20 mm marker, both objects flat, and low lens distortion.', marker, ring, supportedConditions: 'One circular opening with a visible narrow rim; small exterior details may be supported; light matte surface; the supplied 20 mm marker in the same plane; sharp, near-overhead photo.', diagnostics: { ...(best.source === 'partially-supported-metal-rim' ? { observedFraction: best.observedFraction, pairedColourFraction: best.pairedColourFraction, supportedPairFraction: best.supportedPairFraction, strongColourFraction: best.strongColourFraction, localGrayFraction: best.localGrayFraction, maxUnsupportedArcDegrees: best.maxUnsupportedArcDegrees, jackknifeSpreadMm: best.jackknifeSpreadMm, seedSpreadMm: best.seedSpreadMm, seedKernelCount: best.seedKernelCount, seedCenterSpreadPx: best.seedCenterSpreadPx, supportedImagePoints: best.supportedImagePoints } : {}), boundaryMethod: best.source || 'luminance-contour', thresholdSpreadMm: spread, edgeContrast: edge.contrast, edgeSharpnessRatio: edge.sharpness, correctedAxesMm: best.axes.map((v) => v * overlayScale), contourResidual: best.residual, ...(best.source === 'chromatic-rim' ? { rimCoverage: best.rimCoverage, minSectorCoverage: best.minSectorCoverage, chromaGradient: best.chromaGradient } : {}) } });
     } finally { for (let i = mats.length - 1; i >= 0; i--) mats[i].delete(); }
   }
 
-  return Object.freeze({ analyze, MARKER_SIDE_MM, MARKER_PATTERN, LIMITS, version: '1.2.0' });
+  return Object.freeze({ analyze, MARKER_SIDE_MM, MARKER_PATTERN, LIMITS, version: '1.3.0' });
 });

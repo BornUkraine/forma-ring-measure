@@ -1,17 +1,18 @@
 {
   "date": "2026-11-01",
   "timezone": "Europe/Kyiv",
-  "engineVersion": "1.2.0",
-  "engineFileSha256": "eaf6e53ace7c4fe47d2a1107240ea72a33946e4d842edbe2d365a2c0c5d039f9",
-  "dataset": "Eight existing private jewellery photos; original images and local paths omitted from this public summary.",
+  "engineVersion": "1.3.0",
+  "engineFileSha256": "b92bdde3e20cc936ffb52e8cf930320061273076c8b24903db491365c04feae6",
+  "dataset": "Eight existing private jewellery photos; original images, local paths, filenames and image geometry omitted from this public summary.",
+  "evidenceType": "Exploratory development set; not a held-out physical accuracy study.",
   "independentReferencesPassedToEngine": false,
   "physicalAccuracyEstablished": false,
   "physicalMarkerDimensionsMm": null,
   "assumedMarkerSideMm": 20,
   "markerNote": "Compensated replacement: 21.62 mm in file, target 20 x 20 mm on paper; actual print unverified. Old 18.5 mm print discarded.",
   "referenceNote": "Approximate user references, instrument/resolution unspecified. Differences are comparisons, not validated accuracy errors.",
-  "accepted": 4,
-  "refused": 4,
+  "accepted": 6,
+  "refused": 2,
   "total": 8,
   "results": [
     {
@@ -24,8 +25,8 @@
         "diameterMm": 17.044645309448242,
         "provisionalUncertaintyMm": 0.6,
         "differenceFromApproximateReferenceMm": 1.0446453094482422,
-        "timeToResultMs": 2895,
-        "processingMs": 2377,
+        "timeToResultMs": 2178,
+        "processingMs": 2046,
         "diagnostics": {
           "boundaryMethod": "chromatic-rim",
           "thresholdSpreadMm": 0.040679931640625,
@@ -45,10 +46,27 @@
         "status": "ok",
         "code": null,
         "diameterMm": 17.047222137451172,
-        "timeToResultMs": 1629.37,
-        "processingMs": 1461
+        "provisionalUncertaintyMm": 0.6,
+        "differenceFromApproximateReferenceMm": 1.0472221374511719,
+        "timeToResultMs": 2127.27,
+        "processingMs": 1941,
+        "diagnostics": {
+          "boundaryMethod": "chromatic-rim",
+          "thresholdSpreadMm": 0.05245018005371094,
+          "edgeContrast": 64.70947905580954,
+          "edgeSharpnessRatio": 0.37044794227962297,
+          "correctedAxesMm": [
+            16.90088743821652,
+            17.193556836685822
+          ],
+          "contourResidual": 0.01366003828405347,
+          "rimCoverage": 1,
+          "minSectorCoverage": 1,
+          "chromaGradient": 7.301204553645485
+        }
       },
-      "visualReview": "Visible inner metal rim rather than lit-paper/shadow boundary; ellipse approximates the wavy rim."
+      "visualReview": "Ellipse follows the visible inner metal rim rather than the displaced lit-paper/shadow boundary; it approximates the wavy rim.",
+      "boundedGapInference": false
     },
     {
       "photo": 2,
@@ -60,8 +78,8 @@
         "diameterMm": 17.303439140319824,
         "provisionalUncertaintyMm": 0.7,
         "differenceFromApproximateReferenceMm": 1.3034391403198242,
-        "timeToResultMs": 1758,
-        "processingMs": 1650,
+        "timeToResultMs": 2427,
+        "processingMs": 2273,
         "diagnostics": {
           "boundaryMethod": "chromatic-rim",
           "thresholdSpreadMm": 0.03603363037109375,
@@ -81,10 +99,27 @@
         "status": "ok",
         "code": null,
         "diameterMm": 17.307687759399414,
-        "timeToResultMs": 1553.39,
-        "processingMs": 1403
+        "provisionalUncertaintyMm": 0.7,
+        "differenceFromApproximateReferenceMm": 1.307687759399414,
+        "timeToResultMs": 1770.99,
+        "processingMs": 1555,
+        "diagnostics": {
+          "boundaryMethod": "chromatic-rim",
+          "thresholdSpreadMm": 0.043827056884765625,
+          "edgeContrast": 67.50437453737302,
+          "edgeSharpnessRatio": 0.33259153330782176,
+          "correctedAxesMm": [
+            17.165608762119096,
+            17.449766756679733
+          ],
+          "contourResidual": 0.015400296445681567,
+          "rimCoverage": 1,
+          "minSectorCoverage": 1,
+          "chromaGradient": 7.01024602355143
+        }
       },
-      "visualReview": "Visible inner metal rim rather than lit-paper/shadow boundary; ellipse approximates the wavy rim."
+      "visualReview": "Ellipse follows the visible inner metal rim rather than the displaced lit-paper/shadow boundary; it approximates the wavy rim.",
+      "boundedGapInference": false
     },
     {
       "photo": 3,
@@ -96,8 +131,8 @@
         "diameterMm": 17.000102043151855,
         "provisionalUncertaintyMm": 0.7,
         "differenceFromApproximateReferenceMm": 1.0001020431518555,
-        "timeToResultMs": 1912,
-        "processingMs": 1755,
+        "timeToResultMs": 2955,
+        "processingMs": 2792,
         "diagnostics": {
           "boundaryMethod": "chromatic-rim",
           "thresholdSpreadMm": 0.0591583251953125,
@@ -117,10 +152,27 @@
         "status": "ok",
         "code": null,
         "diameterMm": 16.994232654571533,
-        "timeToResultMs": 1530.63,
-        "processingMs": 1377
+        "provisionalUncertaintyMm": 0.7,
+        "differenceFromApproximateReferenceMm": 0.9942326545715332,
+        "timeToResultMs": 1968.42,
+        "processingMs": 1747,
+        "diagnostics": {
+          "boundaryMethod": "chromatic-rim",
+          "thresholdSpreadMm": 0.06254863739013672,
+          "edgeContrast": 65.18448718256474,
+          "edgeSharpnessRatio": 0.3243269093453321,
+          "correctedAxesMm": [
+            16.944113527220203,
+            17.044351781922863
+          ],
+          "contourResidual": 0.016781059053021168,
+          "rimCoverage": 0.9791666666666666,
+          "minSectorCoverage": 0.9166666666666666,
+          "chromaGradient": 6.903312371672608
+        }
       },
-      "visualReview": "Visible inner metal rim rather than lit-paper/shadow boundary; ellipse approximates the wavy rim."
+      "visualReview": "Ellipse follows the visible inner metal rim rather than the displaced lit-paper/shadow boundary; it approximates the wavy rim.",
+      "boundedGapInference": false
     },
     {
       "photo": 4,
@@ -132,8 +184,8 @@
         "diameterMm": 17.135704040527344,
         "provisionalUncertaintyMm": 0.7,
         "differenceFromApproximateReferenceMm": 1.1357040405273438,
-        "timeToResultMs": 1671,
-        "processingMs": 1582,
+        "timeToResultMs": 2048,
+        "processingMs": 1925,
         "diagnostics": {
           "boundaryMethod": "chromatic-rim",
           "thresholdSpreadMm": 0.1326913833618164,
@@ -153,10 +205,27 @@
         "status": "ok",
         "code": null,
         "diameterMm": 17.008183479309082,
-        "timeToResultMs": 1358.29,
-        "processingMs": 1200
+        "provisionalUncertaintyMm": 0.7,
+        "differenceFromApproximateReferenceMm": 1.008183479309082,
+        "timeToResultMs": 1913.99,
+        "processingMs": 1720,
+        "diagnostics": {
+          "boundaryMethod": "chromatic-rim",
+          "thresholdSpreadMm": 0.13710784912109375,
+          "edgeContrast": 53.71212426818262,
+          "edgeSharpnessRatio": 0.3275677532555524,
+          "correctedAxesMm": [
+            16.87264338200421,
+            17.143723576613954
+          ],
+          "contourResidual": 0.014837133447962947,
+          "rimCoverage": 0.9895833333333334,
+          "minSectorCoverage": 0.9166666666666666,
+          "chromaGradient": 6.739499721079464
+        }
       },
-      "visualReview": "Visible inner metal rim rather than lit-paper/shadow boundary; ellipse approximates the wavy rim."
+      "visualReview": "Ellipse follows the visible inner metal rim rather than the displaced lit-paper/shadow boundary; it approximates the wavy rim.",
+      "boundedGapInference": false
     },
     {
       "photo": 5,
@@ -168,41 +237,89 @@
         "diameterMm": null,
         "provisionalUncertaintyMm": null,
         "differenceFromApproximateReferenceMm": null,
-        "timeToResultMs": 1738,
-        "processingMs": 1633,
+        "timeToResultMs": 2883,
+        "processingMs": 2733,
         "diagnostics": null
       },
       "sharpCore": {
         "status": "retake",
         "code": "multiple_rings",
         "diameterMm": null,
-        "timeToResultMs": 1612.11,
-        "processingMs": 1421
+        "provisionalUncertaintyMm": null,
+        "differenceFromApproximateReferenceMm": null,
+        "timeToResultMs": 2512.85,
+        "processingMs": 2274,
+        "diagnostics": null
       },
-      "visualReview": "Two visible objects; refusal without a diameter."
+      "visualReview": "Two objects are visible; no diameter is published.",
+      "boundedGapInference": false
     },
     {
       "photo": 6,
       "object": "ring with protrusions",
       "approximateReferenceMm": 17,
       "browser": {
-        "status": "retake",
-        "code": "ring_not_found",
-        "diameterMm": null,
-        "provisionalUncertaintyMm": null,
-        "differenceFromApproximateReferenceMm": null,
-        "timeToResultMs": 1598,
-        "processingMs": 1470,
-        "diagnostics": null
+        "status": "ok",
+        "code": null,
+        "diameterMm": 17.64751625061035,
+        "provisionalUncertaintyMm": 0.6,
+        "differenceFromApproximateReferenceMm": 0.6475162506103516,
+        "timeToResultMs": 5432,
+        "processingMs": 4387,
+        "diagnostics": {
+          "boundaryMethod": "partially-supported-metal-rim",
+          "thresholdSpreadMm": 0.02782726287841797,
+          "edgeContrast": 46.031395651207696,
+          "edgeSharpnessRatio": 0.4240248951628942,
+          "correctedAxesMm": [
+            17.164825439453125,
+            18.130207061767578
+          ],
+          "contourResidual": 0.01116394295922935,
+          "observedFraction": 0.8263888888888888,
+          "pairedColourFraction": 0.9236111111111112,
+          "supportedPairFraction": 0.8194444444444444,
+          "strongColourFraction": 0.75,
+          "localGrayFraction": 0.6944444444444444,
+          "maxUnsupportedArcDegrees": 25,
+          "jackknifeSpreadMm": 0.049297332763671875,
+          "seedSpreadMm": 0.02782726287841797,
+          "seedKernelCount": 2,
+          "seedCenterSpreadPx": 0.2505863826715049
+        }
       },
       "sharpCore": {
-        "status": "retake",
-        "code": "ring_not_found",
-        "diameterMm": null,
-        "timeToResultMs": 1458.3,
-        "processingMs": 1287
+        "status": "ok",
+        "code": null,
+        "diameterMm": 17.67472743988037,
+        "provisionalUncertaintyMm": 0.6,
+        "differenceFromApproximateReferenceMm": 0.6747274398803711,
+        "timeToResultMs": 4242.1,
+        "processingMs": 3937,
+        "diagnostics": {
+          "boundaryMethod": "partially-supported-metal-rim",
+          "thresholdSpreadMm": 0.025177955627441406,
+          "edgeContrast": 47.570811596782704,
+          "edgeSharpnessRatio": 0.4368648004685657,
+          "correctedAxesMm": [
+            17.176451132592966,
+            18.173003747167776
+          ],
+          "contourResidual": 0.010921260974412423,
+          "observedFraction": 0.8194444444444444,
+          "pairedColourFraction": 0.9236111111111112,
+          "supportedPairFraction": 0.8125,
+          "strongColourFraction": 0.7291666666666666,
+          "localGrayFraction": 0.7083333333333334,
+          "maxUnsupportedArcDegrees": 17.5,
+          "jackknifeSpreadMm": 0.045639991760253906,
+          "seedSpreadMm": 0.025177955627441406,
+          "seedKernelCount": 2,
+          "seedCenterSpreadPx": 0.35565436934994615
+        }
       },
-      "visualReview": "Marker detected, complete metal opening not established; no diameter."
+      "visualReview": "Fit follows the narrow inner rim across supported regions. Gaps are inferred and the complete boundary was not independently observed.",
+      "boundedGapInference": true
     },
     {
       "photo": 7,
@@ -214,44 +331,94 @@
         "diameterMm": null,
         "provisionalUncertaintyMm": null,
         "differenceFromApproximateReferenceMm": null,
-        "timeToResultMs": 1739,
-        "processingMs": 1631,
+        "timeToResultMs": 4322,
+        "processingMs": 4176,
         "diagnostics": null
       },
       "sharpCore": {
         "status": "retake",
         "code": "ring_not_found",
         "diameterMm": null,
-        "timeToResultMs": 1395.8,
-        "processingMs": 1208
+        "provisionalUncertaintyMm": null,
+        "differenceFromApproximateReferenceMm": null,
+        "timeToResultMs": 4484.79,
+        "processingMs": 4184,
+        "diagnostics": null
       },
-      "visualReview": "Marker detected, complete metal opening not established; no diameter."
+      "visualReview": "Marker detected; sufficient supported rim evidence was not established; no diameter is published.",
+      "boundedGapInference": false
     },
     {
       "photo": 8,
       "object": "ring with protrusions",
       "approximateReferenceMm": 17,
       "browser": {
-        "status": "retake",
-        "code": "ring_not_found",
-        "diameterMm": null,
-        "provisionalUncertaintyMm": null,
-        "differenceFromApproximateReferenceMm": null,
-        "timeToResultMs": 1606,
-        "processingMs": 1492,
-        "diagnostics": null
+        "status": "ok",
+        "code": null,
+        "diameterMm": 17.779619693756104,
+        "provisionalUncertaintyMm": 0.6,
+        "differenceFromApproximateReferenceMm": 0.7796196937561035,
+        "timeToResultMs": 3303,
+        "processingMs": 3190,
+        "diagnostics": {
+          "boundaryMethod": "partially-supported-metal-rim",
+          "thresholdSpreadMm": 0.1883993148803711,
+          "edgeContrast": 48.16943487311978,
+          "edgeSharpnessRatio": 0.4077516842912391,
+          "correctedAxesMm": [
+            17.447284936226062,
+            18.111954451286145
+          ],
+          "contourResidual": 0.008425552392394453,
+          "observedFraction": 0.7638888888888888,
+          "pairedColourFraction": 0.8958333333333334,
+          "supportedPairFraction": 0.7430555555555556,
+          "strongColourFraction": 0.6597222222222222,
+          "localGrayFraction": 0.6597222222222222,
+          "maxUnsupportedArcDegrees": 22.5,
+          "jackknifeSpreadMm": 0.04930305480957031,
+          "seedSpreadMm": 0.1883993148803711,
+          "seedKernelCount": 2,
+          "seedCenterSpreadPx": 1.8430492900182367
+        }
       },
       "sharpCore": {
-        "status": "retake",
-        "code": "ring_not_found",
-        "diameterMm": null,
-        "timeToResultMs": 1526.01,
-        "processingMs": 1361
+        "status": "ok",
+        "code": null,
+        "diameterMm": 17.792895317077637,
+        "provisionalUncertaintyMm": 0.6,
+        "differenceFromApproximateReferenceMm": 0.7928953170776367,
+        "timeToResultMs": 4785.74,
+        "processingMs": 4464,
+        "diagnostics": {
+          "boundaryMethod": "partially-supported-metal-rim",
+          "thresholdSpreadMm": 0.044933319091796875,
+          "edgeContrast": 48.37393506713467,
+          "edgeSharpnessRatio": 0.40941479813050186,
+          "correctedAxesMm": [
+            17.332905754054707,
+            18.25288488010057
+          ],
+          "contourResidual": 0.010245089065537259,
+          "observedFraction": 0.8194444444444444,
+          "pairedColourFraction": 0.9027777777777778,
+          "supportedPairFraction": 0.7847222222222222,
+          "strongColourFraction": 0.7638888888888888,
+          "localGrayFraction": 0.6875,
+          "maxUnsupportedArcDegrees": 15,
+          "jackknifeSpreadMm": 0.02339458465576172,
+          "seedSpreadMm": 0.044933319091796875,
+          "seedKernelCount": 2,
+          "seedCenterSpreadPx": 0.5187434662844067
+        }
       },
-      "visualReview": "Marker detected, complete metal opening not established; no diameter."
+      "visualReview": "Fit follows the narrow inner rim across supported regions. Gaps are inferred and the complete boundary was not independently observed.",
+      "boundedGapInference": true
     }
   ],
   "regressionSummary": {
+    "baselineEngineVersion": "1.2.0",
+    "baselineEngineFileSha256": "eaf6e53ace7c4fe47d2a1107240ea72a33946e4d842edbe2d365a2c0c5d039f9",
     "total": 17,
     "statusAndCodePreserved": 17,
     "washerSharpMm": [
@@ -259,23 +426,32 @@
       9.829061809427316,
       9.853149077396052
     ],
-    "washerBrowserPhoto6": 9.765094038278162,
+    "acceptedWasherDiameterChangesMm": [
+      0,
+      0,
+      0
+    ],
+    "blurredWasherRefusals": 5,
     "thickRingRefusals": 5,
-    "unsupportedInternetRefusals": 4
+    "missingMarkerRefusals": 4
   },
   "browserVerification": {
     "nativeFileChooser": true,
     "actualDownloadedReports": true,
-    "mobileCssPixels": {
-      "width": 390,
-      "height": 844
-    },
-    "wideCssPixels": {
-      "width": 1440,
-      "height": 900
-    },
-    "noHorizontalOverflow": true,
-    "physicalPhoneTest": false
+    "physicalPhonePerformanceEstablished": false,
+    "interfaceVerification": "See VERIFICATION.md for viewport and workflow checks."
   },
-  "timingNote": "Browser includes decoding, worker readiness and processing; first operation after reload may use cached assets. Sharp/core excludes cold runtime startup. Device-specific; not a phone/network benchmark."
+  "timingNote": "Browser includes decoding, worker readiness and processing, excluding file selection. Photo 6 was the first operation after reload; cached assets and concurrent local work affect timings. Sharp/core excludes cold runtime startup and overlay generation. Device-specific observations, not a phone/network benchmark.",
+  "history": [
+    {
+      "engineVersion": "1.1.0",
+      "accepted": 0,
+      "refused": 8
+    },
+    {
+      "engineVersion": "1.2.0",
+      "accepted": 4,
+      "refused": 4
+    }
+  ]
 }

@@ -1,5 +1,7 @@
 # Mobile upload and results follow-up — 2026-11-01
 
+This is the historical upload/UI verification with engine 1.2.0. Subsequent engine 1.3.0 results, including successful browser uploads of protruding-ring photos 6 and 8, are recorded in [JEWELLERY-VALIDATION.md](JEWELLERY-VALIDATION.md). The earlier outcomes and timings below are retained as evidence of that earlier version.
+
 The supplied phone recording showed selected photos reaching the decoder and the detector. Several selected photos showed rings in a hand without the calibration marker; those refusals are appropriate. A marked photo was also refused because its inner edge could not be measured. The interface made the distinction difficult to understand: tiny text, a large decorative hero, a photo before the refusal, inconsistent replacement buttons and abrupt scroll changes.
 
 ## Changes

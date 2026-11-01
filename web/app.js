@@ -282,10 +282,20 @@
       });
     }
     if (result.ring && result.ring.points) {
+      const observed = result.diagnostics && result.diagnostics.supportedImagePoints;
       context.strokeStyle = '#bf9651';
-      context.setLineDash(result.status === 'ok' ? [] : [5 * factor, 4 * factor]);
+      if (observed) { context.lineWidth = 0.8 * factor; context.shadowBlur = 0; }
+      context.setLineDash(result.status === 'ok' && !observed ? [] : [5 * factor, 4 * factor]);
       drawPolyline(context, result.ring.points, true);
       context.setLineDash([]);
+      if (observed) {
+        context.fillStyle = '#3b8964';
+        for (const p of observed) {
+          context.beginPath();
+          context.arc(p.x, p.y, 0.7 * factor, 0, Math.PI * 2);
+          context.fill();
+        }
+      }
     }
     context.shadowBlur = 0;
     if (result.marker && Number.isFinite(result.marker.pixelsPerMm)) {
@@ -374,6 +384,10 @@
     $('photo-name').textContent = currentImage.name;
     $('sample-badge').hidden = !currentImage.sample;
     $('processing-time').textContent = formatTime(elapsed);
+    const observedFraction = result.diagnostics && result.diagnostics.observedFraction;
+    $('boundary-note').hidden = !okay || !Number.isFinite(observedFraction);
+    $('boundary-note').textContent = Number.isFinite(observedFraction)
+      ? `Green dots mark supported edge points (${Math.round(observedFraction * 100)}% of samples). The dashed outline bridges small gaps near reflections or details.` : '';
     const hasMarker = !!(result.marker && result.marker.corners && result.marker.corners.length > 1);
     const hasRing = !!(result.ring && result.ring.points && result.ring.points.length > 1);
     $('marker-legend').hidden = !hasMarker;

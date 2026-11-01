@@ -2,7 +2,7 @@
 
 Updated: 2026-11-01 (Europe/Kyiv). Existing Forma / RingMeasure prototype continued for the supplied assignment. The core flow is an existing-photo upload; there is no camera integration.
 
-The [mobile upload follow-up](MOBILE-UPLOAD-FIX.md) records fixes prompted by the supplied phone recording: direct repeat selection, preserved results on picker cancellation, bounded decoding, clearer refusals and readable mobile results. All 51 automated tests pass. Measurement accuracy and support limits are unchanged.
+The [mobile upload follow-up](MOBILE-UPLOAD-FIX.md) records fixes prompted by the supplied phone recording: direct repeat selection, preserved results on picker cancellation, bounded decoding, clearer refusals and readable mobile results. Engine **1.3.0** additionally measures the protruding ring in photos 6 and 8: the browser displays **17.6 and 17.8 mm**. Photo 7 remains unsupported; photo 5 correctly refuses two objects. All **61 automated tests** pass. The UI distinguishes supported edge points from the fitted outline across small gaps. Physical accuracy remains unvalidated; see [JEWELLERY-VALIDATION.md](JEWELLERY-VALIDATION.md).
 
 ## What is delivered
 
