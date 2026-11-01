@@ -62,7 +62,7 @@
   .header-download{font-size:14px;padding:8px 0;gap:7px;border:0}
   .header-download svg{width:18px;height:18px}
   .hero{display:block;padding:20px 0}
-  .hero .eyebrow,.hero-description,.hero-visual,.desktop-title{display:none}
+  .hero .eyebrow,.hero-description,.desktop-title{display:none}
   .mobile-title{display:inline}
   .hero h1{font-size:36px;line-height:1.1;letter-spacing:-1.2px;margin:0}
   .hero h1 em{letter-spacing:-1.2px}

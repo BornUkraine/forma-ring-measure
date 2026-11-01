@@ -26,10 +26,13 @@
 @media(max-width:360px){.ring-stage{height:200px}.ring-scene-footer{gap:10px}.ring-scene-caption{font-size:7px}.ring-motion-toggle{font-size:7px}}
 
 .ring-motion-toggle{font-size:12px;min-height:44px;padding:8px 4px}
-/* This stylesheet loads last: keep its decorative display rule from pushing
-   the upload action below the first screen on phones and small tablets. */
+/* Keep the signature ring on the mobile landing page in a compact studio.
+   The whole hero is hidden by styles.css while processing or showing a result. */
 @media(max-width:760px){
-  .hero-ring-visual{display:none}
+  .hero-ring-visual{display:block;width:100%;max-width:360px;margin:8px auto 0}
+  .ring-stage{height:160px}
+  .ring-scene-caption{display:none}
+  .ring-scene-footer{min-height:44px}
   .hero{padding:20px 0}
   .hero .privacy-note{margin-top:10px}
 }

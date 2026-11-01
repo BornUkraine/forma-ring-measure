@@ -36,3 +36,9 @@ Native mobile gallery cancellation is covered at the event level, not through a 
 `web/engine.js` is unchanged: SHA-256 `eaf6e53ace7c4fe47d2a1107240ea72a33946e4d842edbe2d365a2c0c5d039f9`. This UI change does not make unsupported jewellery measurable or validate physical accuracy. The earlier [eight-photo report](JEWELLERY-VALIDATION.md), unconfirmed print scale and approximate-reference discrepancies still apply. A photo without a readable scale cannot establish a diameter in millimetres.
 
 Personal photos and the video are not public fixtures and are excluded from the repository and deployment archive. Site access remains owner-only.
+
+## Follow-up: restore the mobile landing illustration (2026-11-01)
+
+The mobile upload change had hidden the decorative ring at widths up to 760 px. The existing animated ring is now visible again on the landing screen in a compact 160 px studio, with its accessible pause/play control. During processing and on the result screen the hero remains hidden and its animation pauses. Desktop styling and the measurement engine are unchanged (engine 1.3.0, SHA-256 `b92bdde3e20cc936ffb52e8cf930320061273076c8b24903db491365c04feae6`).
+
+Browser verification used measured CSS viewports of 360 x 800, 390 x 844 and 1440 x 900. No horizontal overflow was observed. The upload button remained within the first viewport at both phone sizes (bottom approximately 706 CSS px, height 48 px). Pause/play worked; the built-in synthetic 17 mm example returned 17.0 mm, with the hero hidden and paused on the result screen. A page reload restored the landing illustration. The desktop studio retained its 305 px height. Browser console errors: none. Static build and `git diff --check` passed. Preview evidence remains private in `artifacts/mobile-hero-20261101/`; these viewport checks are not a physical-phone test.
